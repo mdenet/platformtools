@@ -62,12 +62,6 @@
 
                 "buttons" : [ 
                       { 
-                        "id": "refresh-button", 
-                        "icon": "refresh",
-                        "renderfunction": "",
-                        "hint": "Render the metamodel class diagram" 
-                      }, 
-                      { 
                         "id": "help-button", 
                         "icon": "info",
                         "url": "https://www.eclipse.org/emfatic/",
