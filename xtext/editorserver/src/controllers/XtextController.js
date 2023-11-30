@@ -8,6 +8,9 @@ import { config } from "../config.js";
 
 class XtextController {
     upload;
+    // Current line being assembled for the build log
+    currentBuildLogLine = "";
+    // Build log assembled so far
     buildLog = "";
     errorLog = "";
     exitCode = null;
@@ -37,9 +40,26 @@ class XtextController {
 
             build.stdout.on('data', (data) => {
                 console.log(`stdout: ${data}`);
-                this.buildLog += data;
-            });
               
+                this.currentBuildLogLine += data;
+                let lastEOLPos = this.currentBuildLogLine.lastIndexOf("\n");
+                if (lastEOLPos > -1) {
+                    // Conditionally add line to build log
+                    let stuffToAdd = this.currentBuildLogLine.substring(0, lastEOLPos);
+                    this.currentBuildLogLine = this.currentBuildLogLine.substring(lastEOLPos + 1);
+
+                    // console.log(`About to add new line to build log: "${stuffToAdd}"`);
+
+                    stuffToAdd.split("\n").forEach ((val) => {
+                        // TODO: This is a bit crude: really we would want to extract only the response from Xtext proper, but it's better than sending the whole MVN log
+                        if (!val.startsWith("[")) {
+                            console.log(`Adding to build log: "${val}"`);
+                            this.buildLog += val + "\n";
+                        }
+                    });
+                }
+            });
+
             build.stderr.on('data', (data) => {
                 console.error(`stderr: ${data}`);
                 this.errorLog += data;
@@ -47,6 +67,13 @@ class XtextController {
 
             build.on('close', (code) => {
                 console.log(`building ${req.file.filename} completed with code ${code}`);
+
+                // TODO: This is a bit crude: really we would want to extract only the response from Xtext proper, but it's better than sending the whole MVN log
+                if (!this.currentBuildLogLine.startsWith("[")) {
+                    console.log(`Adding to build log: "${this.currentBuildLogLine}"`);
+                    this.buildLog += this.currentBuildLogLine;
+                }
+
                 this.exitCode = code;
             }); 
 
