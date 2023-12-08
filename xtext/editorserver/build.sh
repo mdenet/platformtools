@@ -21,7 +21,7 @@ unzip -q $archiveFile
 
 cd ./*.parent
 
-mvn --batch-mode clean install
+mvn --batch-mode --quiet clean install
 
 cd ..
 
