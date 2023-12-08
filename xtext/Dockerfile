@@ -40,20 +40,32 @@ RUN mvn clean install -Pxtext
 # Get runtime dependencies 
 RUN mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.0:get -Dartifact=com.google.cloud.functions:function-maven-plugin:0.9.5 && mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.0:get -Dartifact=org.apache.maven.plugins:maven-deploy-plugin:2.7 
 
-WORKDIR /usr/src/toolfunctions
-
-
-
-
 
 FROM tomcat:9.0.76-jdk17-temurin
+
 
 # toolserice main endpoint port
 ENV TS_PORT=9000
 # editor server internal port
 ENV ES_PORT=10001 
 
-RUN apt-get update && apt-get install -y --no-install-recommends unzip zip maven nodejs npm
+ENV INSTALL_DIR=/usr/local
+
+# The release of node to install
+ENV NODE_VERSION=19.9.0
+ENV NODE_RELEASE=node-v${NODE_VERSION}-linux-x64
+
+RUN apt-get update && apt-get install -y --no-install-recommends unzip zip xz-utils maven 
+
+# Install node
+WORKDIR $INSTALL_DIR
+RUN echo installing ${NODE_RELEASE}\
+    && curl --output ${NODE_RELEASE}.tar.xz  https://nodejs.org/download/release/v${NODE_VERSION}/${NODE_RELEASE}.tar.xz\
+    && tar -xf ${NODE_RELEASE}.tar.xz
+ENV PATH="$INSTALL_DIR/${NODE_RELEASE}/bin:${PATH}"
+
+
+WORKDIR /usr/src/toolfunctions
 
 # Copy built tool and sources
 COPY --from=toolfunctions /root/.m2 /root/.m2
