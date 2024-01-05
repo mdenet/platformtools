@@ -1,5 +1,8 @@
-
 #! /bin/bash
+
+# clean any previous editor instances
+find ${CATALINA_HOME}/webapps/ -type f -not -name 'ROOT.war' -delete
+find ${CATALINA_HOME}/webapps/ -type d -not -name 'ROOT' -delete
 
 # start tomcat
 catalina.sh run &
