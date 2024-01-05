@@ -47,6 +47,10 @@ mv $modeBasePath/$modeFileName ../acemodebundler/src/$modeFileName
 npm --prefix ../acemodebundler run build
 mv ../acemodebundler/dist/$modeFileName ./$modeBasePath/$modeFileName
 
+# Add Xtext-generated meta-model
+metamodelName=$(find $buildDir -name '*.ecore')
+cp $metamodelName ./xtext-resources/generated/meta-model.ecore
+
 # Add tomcat http headers config
 cp ../acemodebundler/web.xml ./WEB-INF/web.xml
 
@@ -54,5 +58,3 @@ zip -q -m -r $archiveFile.war .
 
 # Deploy
 mv $archiveFile.war $deployDir/$archiveFile.war
-
-
