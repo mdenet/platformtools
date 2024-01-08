@@ -1,0 +1,37 @@
+{
+"tool": 
+    {
+        "id": "conversion",
+
+        "name": "Conversion",
+
+        "version": "0.0.1",
+        
+        "author": "MDENet",
+        
+        "homepage": "https://mde-network.com/",
+
+        "functions": [
+            {
+
+                "id": "function-flexmitoxmi",
+
+                "name": "Conversion - Flexmi To Xmi",
+
+                "parameters": [ {"name":"input", "type":"flexmi", "instanceOf":"metamodel"},
+                                {"name":"metamodel", "type":"ecore"} ],
+
+                "returnType": "xmi",
+
+                "path": "http://127.0.0.1:8069/services/FlexmiToXmi"
+
+            }
+
+        ],
+
+        "panelDefs": [
+        ]
+    }
+
+
+} 
