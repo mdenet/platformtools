@@ -1,3 +1,0 @@
-operation getColors() {
-	return Sequence{"azure", "beige", "floralwhite", "lemonchiffon", "mistyrose", "DDFADC", "pink", "wheat", "FAECFF"};
-}
