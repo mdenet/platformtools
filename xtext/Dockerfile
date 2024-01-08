@@ -55,7 +55,7 @@ ENV INSTALL_DIR=/usr/local
 ENV NODE_VERSION=19.9.0
 ENV NODE_RELEASE=node-v${NODE_VERSION}-linux-x64
 
-RUN apt-get update && apt-get install -y --no-install-recommends unzip zip xz-utils maven 
+RUN apt-get update && apt-get install -y --no-install-recommends unzip zip xz-utils maven cron psmisc
 
 # Install node
 WORKDIR $INSTALL_DIR
@@ -94,5 +94,8 @@ RUN chmod +x /editorserver/start.sh
 
 # deploy tool static files
 COPY --from=toolstaticbuild /usr/src/mdenet-tool/dist/ROOT.war /usr/local/tomcat/webapps/ROOT.war
+
+# Cron time for scheduled stop
+ENV XTEXT_ES_STOP_CRON_TIME="* 4 * * *"
 
 ENTRYPOINT [ "/bin/bash", "start.sh" ]
