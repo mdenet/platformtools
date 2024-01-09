@@ -26,20 +26,10 @@ wait_for_service() {
     done
 }
 
-# Functions for running Epsilon
-mvn -B -o function:run -Drun.functionTarget=org.eclipse.epsilon.live.RunEpsilonFunction -Drun.port=8001 &
-wait_for_service Epsilon 127.0.0.1 8001
-
-mvn -B -o function:run -Drun.functionTarget=org.eclipse.epsilon.live.FlexmiToPlantUMLFunction -Drun.port=8002 &
-wait_for_service Flexmi  127.0.0.1 8002
-
-mvn -B -o function:run -Drun.functionTarget=org.eclipse.epsilon.live.EmfaticToPlantUMLFunction -Drun.port=8003 &
-wait_for_service Emfatic 127.0.0.1 8003
-
-# additional functions
+# conversion functions
 cd /toolservice-add/com.mde-network.ep.toolfunctions.epsilonfunction
-mvn -B -o function:run -Drun.functionTarget=com.mdenetnetwork.ep.toolfunctions.epsilonfunction.RunConversionFlexmiToXmi -Drun.port=8004 &
-wait_for_service FlexmiToXmi 127.0.0.1 8004
+mvn -B -o function:run -Drun.functionTarget=com.mdenetnetwork.ep.toolfunctions.epsilonfunction.RunConversionFlexmiToXmi -Drun.port=8001 &
+wait_for_service FlexmiToXmi 127.0.0.1 8001
 
 
 # nginx as frontend + reverse proxy

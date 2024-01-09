@@ -27,9 +27,9 @@ WORKDIR /usr/src/mdenet-tool
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY static.epsilon/package*.json ./
+COPY static.conversion/package*.json ./
 
-COPY static.epsilon .
+COPY static.conversion .
 
 RUN npm install; npm run build; chmod -R 755 dist/
 
@@ -57,7 +57,7 @@ COPY --from=toolfunctions /root/.m2 /root/.m2
 COPY --from=toolfunctions /usr/src/toolfunctions /toolservice-add
 
 # Copy files for webserver
-COPY static.epsilon/nginx.conf.template /etc/nginx.conf.template
+COPY static.conversion/nginx.conf.template /etc/nginx.conf.template
 
 RUN rm -r /usr/share/nginx/html/*
 
@@ -72,7 +72,7 @@ WORKDIR /toolservice
 RUN mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
 
 # Copy start script and make it executable
-ADD static.epsilon/start.sh /
+ADD static.conversion/start.sh /
 RUN chmod +x /start.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
