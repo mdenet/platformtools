@@ -2,7 +2,8 @@
 
 # clean any previous editor instances
 find ${CATALINA_HOME}/webapps/ -type f -not -name 'ROOT.war' -delete
-find ${CATALINA_HOME}/webapps/ -type d -not -name 'ROOT' -delete
+find ${CATALINA_HOME}/webapps/ -mindepth 1 -type d -not -name 'ROOT' -exec rm -rf {} \+
+echo Old instances cleaned.
 
 # setup cron job to periodically stop the server
 if [ ! -z "${XTEXT_ES_STOP_CRON_TIME}" ]; then
