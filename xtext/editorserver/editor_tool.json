@@ -1,0 +1,39 @@
+{
+    "tool": {
+        "id": "generated_xtext_editor",
+        "name": "Generated Xtext Editor",
+        "functions": [
+            {
+                "id": "function-xtext-to-xmi",
+                "name": "xtext-to-xmi",
+
+                "parameters": [ {"name":"extension", "type":"text"},
+                                {"name":"text", "type":"xtext"}],
+
+                "returnType": "xmi",
+
+                "path": "{{SELF-URL}}/xtext-services/to-xmi"
+            }
+
+        ],
+        "panelDefs": [
+            {
+                "id": "xtext-editor",
+                "name": "Xtext Language Instance",
+                "panelclass": "XtextEditorPanel",
+                "generated": "true",
+                "icon": "xtext",
+                "language": "xtext",
+
+                "buttons" : [
+                    {
+                        "id": "to-xmi-button", 
+                        "icon": "diagram-generate",
+                        "actionfunction": "function-xtext-to-xmi",
+                        "hint": "Generate Diagram"
+                    }
+                ]
+            }
+        ]
+    }
+}
