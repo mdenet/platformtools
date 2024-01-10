@@ -49,7 +49,10 @@ mv ../acemodebundler/dist/$modeFileName ./$modeBasePath/$modeFileName
 
 # Add Xtext-generated meta-model
 metamodelName=$(find $buildDir -name '*.ecore')
-cp $metamodelName ./xtext-resources/generated/meta-model.ecore
+cp $metamodelName $modeBasePath/meta-model.ecore
+
+# Add tool definition
+cp /editorserver/editor_tool.json $modeBasePath/editor_tool.json
 
 # Add tomcat http headers config
 cp ../acemodebundler/web.xml ./WEB-INF/web.xml
