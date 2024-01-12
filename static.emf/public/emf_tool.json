@@ -25,7 +25,7 @@
     
                     "returnType": "diagram",
     
-                    "path": "http://127.0.0.1:8070/emfatic2plantuml"
+                    "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/epsilon/services/emfatic2plantuml"
     
                 },
     

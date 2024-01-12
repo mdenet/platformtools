@@ -22,7 +22,7 @@
     
                     "returnType": "text",
     
-                    "path": "http://127.0.0.1:9000"
+                    "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/services/xtext"
     
                 }
     
