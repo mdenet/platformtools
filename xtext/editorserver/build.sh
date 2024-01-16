@@ -1,8 +1,8 @@
 #! /bin/bash
 
 archiveFile=$1
-buildDir=$PWD/build/$archiveFile
-deployDir=/usr/local/tomcat/webapps
+buildDir=${ES_BUILD_LOCATION}/$archiveFile
+deployDir=${ES_DEPLOY_FILE_LOCATION}
 
 acemodebundlerDir=/acemodebundler
 modeBasePath=xtext-resources/generated

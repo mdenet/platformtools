@@ -51,6 +51,12 @@ ENV ES_PORT=10001
 
 ENV INSTALL_DIR=/usr/local
 
+# Paths for editor builds
+ENV ES_DIR=/editorserver
+ENV ES_BUILD_LOCATION=${ES_DIR}/build
+ENV ES_UPLOAD_LOCATION=${ES_DIR}/uploads
+ENV ES_DEPLOY_FILE_LOCATION=${CATALINA_HOME}/webapps 
+
 # The release of node to install
 ENV NODE_VERSION=19.9.0
 ENV NODE_RELEASE=node-v${NODE_VERSION}-linux-x64
@@ -72,13 +78,13 @@ COPY --from=toolfunctions /root/.m2 /root/.m2
 COPY --from=toolfunctions /usr/src/toolfunctions /toolservice
 
 COPY xtext/acemodebundler /acemodebundler
-COPY xtext/editorserver /editorserver
+COPY xtext/editorserver ${ES_DIR}
 
 WORKDIR /acemodebundler
 
 RUN npm ci 
 
-WORKDIR /editorserver
+WORKDIR ${ES_DIR}
 
 RUN npm ci --omit=dev
 
@@ -87,13 +93,13 @@ EXPOSE ${TS_PORT}
 #8080 is the default tomcat public port
 EXPOSE 8080
 
-COPY xtext/start.sh /editorserver/start.sh
+COPY xtext/start.sh ${ES_DIR}/start.sh
 
 
-RUN chmod +x /editorserver/start.sh
+RUN chmod +x ${ES_DIR}/start.sh
 
 # deploy tool static files
-COPY --from=toolstaticbuild /usr/src/mdenet-tool/dist/ROOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=toolstaticbuild /usr/src/mdenet-tool/dist/ROOT.war ${ES_DEPLOY_FILE_LOCATION}/ROOT.war
 
 # Cron time for scheduled stop
 ENV XTEXT_ES_STOP_CRON_TIME="* 4 * * *"
