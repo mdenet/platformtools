@@ -8,10 +8,6 @@ import { config } from "../config.js";
 
 class XtextController {
     upload;
-    buildLog = "";
-    errorLog = "";
-    exitCode = null;
-
     router = express.Router();
 
     constructor(multipartHandler) {
@@ -21,9 +17,6 @@ class XtextController {
     }
 
     saveProject = async (req, res, next) => {
-        this.buildLog = "";
-        this.errorLog = "";
-        this.exitCode = null;
 
         try {
             //TODO validate request url
@@ -35,19 +28,8 @@ class XtextController {
 
             console.log(`started build of ${req.file.filename}`)
 
-            build.stdout.on('data', (data) => {
-                console.log(`stdout: ${data}`);
-                this.buildLog += data;
-            });
-              
-            build.stderr.on('data', (data) => {
-                console.error(`stderr: ${data}`);
-                this.errorLog += data;
-            });
-
             build.on('close', (code) => {
                 console.log(`building ${req.file.filename} completed with code ${code}`);
-                this.exitCode = code;
             }); 
 
             let response = {};
@@ -66,14 +48,44 @@ class XtextController {
         try {
             const editorId = req.params.editorId;
             const filePath = config.deployFileLocation + "/" + editorId;
+            const buildLogPath= `${config.buildFileLocation}/${editorId}/build.log`;
+            const buildErrorLogPath= `${config.buildFileLocation}/${editorId}/build.err`;
+            const buildStatusPath= `${config.buildFileLocation}/${editorId}/build.res`;
             const editorDeployed = fs.existsSync(filePath);
+            
+            let buildLog;
+            let errorLog;
+            let buildStatus;
+
+            // Read the build log
+            try {
+                buildLog = fs.readFileSync(buildLogPath, 'utf8');
+            } catch (err) {
+                console.log("Error reading build log: " + buildLogPath);
+                console.log(err);
+            }
+
+            // Read the error log
+            try {
+                errorLog = fs.readFileSync(buildErrorLogPath, 'utf8');
+            } catch (err) {
+                console.log("Error reading build error log: " + buildErrorLogPath);
+                console.log(err);
+            }
+
+            // Read the build status
+            try {
+                buildStatus = Number( fs.readFileSync(buildStatusPath, 'utf8') );
+            } catch (err) {
+                console.log("Error reading build status: " + buildStatusPath);
+                console.log(err);
+            }
 
             let response = {};
             response.editorReady = editorDeployed;
+            response.output = buildLog;
 
-            response.output = this.buildLog;
-
-            if (this.exitCode != null && this.exitCode > 0 ){
+            if ( buildStatus > 0 ){
                 // Build failed
                 response.error = errorLog;
             }

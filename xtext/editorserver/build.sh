@@ -11,7 +11,7 @@ modeFileName=mode.js
 # Prepare
 mkdir -p $buildDir
 mkdir -p $deployDir
-
+echo null > ${ES_BUILD_LOCATION}/$archiveFile/build.res
 cp ./uploads/$archiveFile $buildDir
 
 cd $buildDir
@@ -21,7 +21,11 @@ unzip -q $archiveFile
 
 cd ./*.parent
 
-mvn --batch-mode --quiet clean install
+mvn --batch-mode --quiet clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log\
+                                      2> ${ES_BUILD_LOCATION}/$archiveFile/build.err
+
+# Save the exit code
+echo $? > ${ES_BUILD_LOCATION}/$archiveFile/build.res
 
 cd ..
 
