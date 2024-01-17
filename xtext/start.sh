@@ -11,13 +11,6 @@ find ${ES_DEPLOY_FILE_LOCATION}/ -type f -not -name 'ROOT.war' -delete
 find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -type d -not -name 'ROOT' -exec rm -rf {} \+ 
 echo Old editor instances cleaned.
 
-# setup cron job to periodically stop the server
-if [ ! -z "${XTEXT_ES_STOP_CRON_TIME}" ]; then
-    (crontab -l; echo "${XTEXT_ES_STOP_CRON_TIME}" echo Scheduled shutdown triggered. "&&" killall -u root) | crontab -
-    crontab -l
-    echo cron job for scheduled shutdown configured.
-fi
-
 # start tomcat
 catalina.sh run &
 

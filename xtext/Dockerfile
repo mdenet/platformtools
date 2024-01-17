@@ -94,14 +94,19 @@ EXPOSE ${TS_PORT}
 EXPOSE 8080
 
 COPY xtext/start.sh ${ES_DIR}/start.sh
+COPY xtext/cron-setup.sh ${ES_DIR}/cron-setup.sh
 
 
 RUN chmod +x ${ES_DIR}/start.sh
+RUN chmod +x ${ES_DIR}/cron-setup.sh
 
 # deploy tool static files
 COPY --from=toolstaticbuild /usr/src/mdenet-tool/dist/ROOT.war ${ES_DEPLOY_FILE_LOCATION}/ROOT.war
 
 # Cron time for scheduled stop
 ENV XTEXT_ES_STOP_CRON_TIME="* 4 * * *"
+
+# setup cron job to periodically stop the server
+RUN ./cron-setup.sh
 
 ENTRYPOINT [ "/bin/bash", "start.sh" ]
