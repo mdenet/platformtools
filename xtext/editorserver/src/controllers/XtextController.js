@@ -49,12 +49,10 @@ class XtextController {
             const editorId = req.params.editorId;
             const filePath = config.deployFileLocation + "/" + editorId;
             const buildLogPath= `${config.buildFileLocation}/${editorId}/build.log`;
-            const buildErrorLogPath= `${config.buildFileLocation}/${editorId}/build.err`;
             const buildStatusPath= `${config.buildFileLocation}/${editorId}/build.res`;
             const editorDeployed = fs.existsSync(filePath);
             
             let buildLog;
-            let errorLog;
             let buildStatus;
 
             // Read the build log
@@ -62,14 +60,6 @@ class XtextController {
                 buildLog = fs.readFileSync(buildLogPath, 'utf8');
             } catch (err) {
                 console.log("Error reading build log: " + buildLogPath);
-                console.log(err);
-            }
-
-            // Read the error log
-            try {
-                errorLog = fs.readFileSync(buildErrorLogPath, 'utf8');
-            } catch (err) {
-                console.log("Error reading build error log: " + buildErrorLogPath);
                 console.log(err);
             }
 
@@ -87,7 +77,7 @@ class XtextController {
 
             if ( buildStatus > 0 ){
                 // Build failed
-                response.error = errorLog;
+                response.error = "Please refer to the build log.";
             }
             
             res.status(200).json(response);

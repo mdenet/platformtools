@@ -21,8 +21,8 @@ unzip -q $archiveFile
 
 cd ./*.parent
 
-mvn --batch-mode --quiet clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log\
-                                      2> ${ES_BUILD_LOCATION}/$archiveFile/build.err
+mvn --batch-mode --quiet clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log 2>&1
+    # sdtout and std error are combined to preserve the interleaving of logs.
 
 # Save the exit code
 echo $? > ${ES_BUILD_LOCATION}/$archiveFile/build.res
