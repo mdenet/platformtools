@@ -73,9 +73,7 @@ public class DSLNAMEServlet extends XtextServlet {
     }
 
     private class RequestStructure {
-        public String resource;
-        public String text;
-        public String language;
+        public String input;
     }
 
     private String exportXMI(HttpServletRequest req) throws InvalidRequestException.UnknownLanguageException, IOException {
@@ -87,20 +85,10 @@ public class DSLNAMEServlet extends XtextServlet {
 
         RequestStructure reqObj = new Gson().fromJson(jb.toString(), RequestStructure.class);		
         
-        IResourceServiceProvider resourceServiceProvider = null;
-        String fileName = reqObj.resource;
-        if (fileName == null) {
-            throw new InvalidRequestException.UnknownLanguageException ("Need to provide resource parameter.");
-        }
-        
-        URI emfURI = URI.createURI(fileName);
-        resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(emfURI);
+        URI emfURI = URI.createURI("input.LANGUAGE_EXT");
+        IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(emfURI);
         if (resourceServiceProvider == null) {
-            if (emfURI.toString().isEmpty()) {
-                throw new InvalidRequestException.UnknownLanguageException ("Unable to identify the Xtext language: missing parameter 'resource'.");
-            } else {
-                throw new InvalidRequestException.UnknownLanguageException ("Unable to identify the Xtext language for resource " + emfURI + ".");
-            }
+            throw new InvalidRequestException.UnknownLanguageException ("Unable to identify the Xtext language.");
         }
 		
         Injector injector = resourceServiceProvider.get(Injector.class);
@@ -108,7 +96,7 @@ public class DSLNAMEServlet extends XtextServlet {
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 
         Resource xtextResource = resourceSet.createResource(emfURI);
-        xtextResource.load(new ByteArrayInputStream(reqObj.text.getBytes()), null);
+        xtextResource.load(new ByteArrayInputStream(reqObj.input.getBytes()), null);
         EcoreUtil.resolveAll(xtextResource);
 
         Resource xmiResource = resourceSet.createResource(URI.createFileURI("result.xmi"));
