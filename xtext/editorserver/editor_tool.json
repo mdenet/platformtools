@@ -7,14 +7,27 @@
                 "id": "function-xtext-to-xmi",
                 "name": "xtext-to-xmi",
 
-                "parameters": [ {"name":"resource", "type":"text"},
-                                {"name":"text", "type":"xtext-generated"}, 
+                "parameters": [ {"name":"input", "type":"xtext-generated"}, 
                                 {"name":"language", "type":"text"}],
 
                 "returnType": "xmi",
 
                 "path": "{{BASE-URL}}/xtext-service/to-xmi"
+            },
+
+            {
+                "id": "function-xtext-to-diagram",
+                "name": "xtext-to-diagram",
+
+                "parameters": [ {"name":"input", "type":"xtext-generated"}, 
+                                {"name":"language", "type":"text"}],
+
+                "returnType": "diagram",
+
+                "path": "{{BASE-URL}}/xtext-service/to-diagram"
             }
+
+
 
         ],
         "panelDefs": [
@@ -28,9 +41,9 @@
 
                 "buttons" : [
                     {
-                        "id": "to-xmi-button", 
+                        "id": "to-diagram-button", 
                         "icon": "diagram-generate",
-                        "actionfunction": "function-xtext-to-xmi",
+                        "actionfunction": "function-xtext-to-diagram",
                         "hint": "Generate Diagram"
                     }
                 ]
