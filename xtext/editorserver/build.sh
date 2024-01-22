@@ -26,6 +26,11 @@ mvn --batch-mode --quiet clean install
 # Run a second round build with the new web servlet code
 # We can only do this here because we first need to have Xtext create the original file
 cd $buildDir/*.web
+
+languageExtension=$(find -name 'mode-*.js')
+languageExtension=${languageExtension##*-} 
+languageExtension=${languageExtension%.*}
+
 cd ./src/
 languagePackageName=$(find -name 'web')
 languagePackageName=${languagePackageName#./}
@@ -37,6 +42,7 @@ languageClassName=${languageClassName%Servlet.java}
 cp /editorserver/Servlet.java *Servlet.java
 sed -i "s@DSLQNAME@$languagePackageName@" *Servlet.java
 sed -i "s@DSLNAME@$languageClassName@" *Servlet.java
+sed -i "s@LANGUAGE_EXT@$languageExtension@" *Servlet.java
 
 cd $buildDir/*.parent
 
@@ -52,10 +58,6 @@ mv $buildDir/*.web/target/*.war .
 unzip -q *.war && rm *.war
 
 # Convert the mode
-languageExtension=$(find $modeBasePath -maxdepth 1 -name 'mode-*.js')
-languageExtension=${languageExtension##*-} 
-languageExtension=${languageExtension%.*}
-
 mv $modeBasePath/mode-*.js $modeBasePath/$modeFileName
 sed -i -z -f ../acemodebundler/xtextAceModeToEpMode.sed $modeBasePath/$modeFileName
 sed -i 's/\x0//g' $modeBasePath/$modeFileName
