@@ -7,8 +7,8 @@ echo Old builds cleaned.
 rm -rf ${ES_UPLOAD_LOCATION}/*
 echo Old uploads cleaned.
 
-find ${ES_DEPLOY_FILE_LOCATION}/ -type f -not -name 'ROOT.war' -delete
-find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -type d -not -name 'ROOT' -exec rm -rf {} \+ 
+find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -maxdepth 1 -type f -not -name 'ROOT.war' -delete
+find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \+ 
 echo Old editor instances cleaned.
 
 # start tomcat
