@@ -31,7 +31,7 @@ class XtextController {
                  console.log(`File '${req.file.originalname}'  received saved as  '${req.file.filename}'`);
             }
 
-            const build = spawn('sh', ['./build.sh', req.file.filename]);
+            const build = spawn('/bin/bash', ['./build.sh', req.file.filename]);
 
             console.log(`started build of ${req.file.filename}`)
 
