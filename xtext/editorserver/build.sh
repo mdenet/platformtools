@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 archiveFile=$1
 buildDir=$PWD/build/$archiveFile
@@ -19,9 +19,28 @@ cd $buildDir
 # Build
 unzip -q $archiveFile
 
-cd ./*.parent
+cd $buildDir/*.parent
 
 mvn --batch-mode --quiet clean install
+
+# Run a second round build with the new web servlet code
+# We can only do this here because we first need to have Xtext create the original file
+cd $buildDir/*.web
+cd ./src/
+languagePackageName=$(find -name 'web')
+languagePackageName=${languagePackageName#./}
+languagePackageName=${languagePackageName////.}
+cd `find -name 'web'`
+languageClassName=$(find -name '*Servlet.java')
+languageClassName=${languageClassName#./}
+languageClassName=${languageClassName%Servlet.java}
+cp /editorserver/Servlet.java *Servlet.java
+sed -i "s@DSLQNAME@$languagePackageName@" *Servlet.java
+sed -i "s@DSLNAME@$languageClassName@" *Servlet.java
+
+cd $buildDir/*.parent
+
+mvn --batch-mode --quiet install
 
 cd ..
 
@@ -52,7 +71,7 @@ metamodelName=$(find $buildDir -name '*.ecore')
 cp $metamodelName $modeBasePath/meta-model.ecore
 
 # Add tool definition
-cp /editorserver/editor_tool.json $modeBasePath/editor_tool.json
+cp /editorserver/editor_tool.json ./editor_tool.json
 
 # Add tomcat http headers config
 cp ../acemodebundler/web.xml ./WEB-INF/web.xml
