@@ -19,6 +19,9 @@ cd $buildDir
 # Build
 unzip -q $archiveFile
 
+parentProjectName=$(find -name '*.parent')
+parentProjectName=${parentProjectName#./}
+parentProjectName=${parentProjectName%.parent}
 cd $buildDir/*.parent
 
 mvn --batch-mode --quiet clean install
@@ -43,6 +46,13 @@ cp /editorserver/Servlet.java *Servlet.java
 sed -i "s@DSLQNAME@$languagePackageName@" *Servlet.java
 sed -i "s@DSLNAME@$languageClassName@" *Servlet.java
 sed -i "s@LANGUAGE_EXT@$languageExtension@" *Servlet.java
+
+cp /editorserver/model2plantuml.egl ./model2plantuml.egl
+
+# Ensure EGL and PlantUML are available to generated tool server for diagram generation
+cd $buildDir/*.web
+cp /editorserver/web-pom.xml ./pom.xml
+sed -i "s@DSL_BASE_NAME@$parentProjectName@" pom.xml
 
 cd $buildDir/*.parent
 
