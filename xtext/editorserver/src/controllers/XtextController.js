@@ -28,6 +28,14 @@ class XtextController {
 
             console.log(`started build of ${req.file.filename}`)
 
+            // Report any stdout and stderr output on the server console to aid debugging
+            build.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+            });
+            build.stderr.on('data', (data) => {
+                console.error(`stderr: ${data}`);
+            });
+
             build.on('close', (code) => {
                 console.log(`building ${req.file.filename} completed with code ${code}`);
             }); 
@@ -57,7 +65,11 @@ class XtextController {
 
             // Read the build log
             try {
-                buildLog = fs.readFileSync(buildLogPath, 'utf8');
+                if (fs.existsSync(buildLogPath)) {
+                    buildLog = fs.readFileSync(buildLogPath, 'utf8');
+                } else {
+                    buildLog = "";
+                }
             } catch (err) {
                 console.log("Error reading build log: " + buildLogPath);
                 console.log(err);
@@ -65,7 +77,11 @@ class XtextController {
 
             // Read the build status
             try {
-                buildStatus = Number( fs.readFileSync(buildStatusPath, 'utf8') );
+                if (fs.existsSync(buildStatusPath)) {
+                    buildStatus = Number( fs.readFileSync(buildStatusPath, 'utf8') );
+                } else {
+                    buildStatus = 0;
+                }
             } catch (err) {
                 console.log("Error reading build status: " + buildStatusPath);
                 console.log(err);
