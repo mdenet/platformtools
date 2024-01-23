@@ -10,6 +10,8 @@ export const config = {
 
     deployFileLocation: process.env.ES_DEPLOY_FILE_LOCATION || "/usr/local/tomcat/webapps",
 
+    buildFileLocation: process.env.ES_BUILD_LOCATION || "/editorserver/build",
+
     endpointsPrefix: process.env.ES_ENDPOINT_PREFIX || "",
 
     trustedWebOrigins: ['http://127.0.0.1:8080'],

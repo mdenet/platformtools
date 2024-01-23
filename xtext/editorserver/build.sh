@@ -1,8 +1,8 @@
 #!/bin/bash
 
 archiveFile=$1
-buildDir=$PWD/build/$archiveFile
-deployDir=/usr/local/tomcat/webapps
+buildDir=${ES_BUILD_LOCATION}/$archiveFile
+deployDir=${ES_DEPLOY_FILE_LOCATION}
 
 acemodebundlerDir=/acemodebundler
 modeBasePath=xtext-resources/generated
@@ -11,7 +11,7 @@ modeFileName=mode.js
 # Prepare
 mkdir -p $buildDir
 mkdir -p $deployDir
-
+echo null > ${ES_BUILD_LOCATION}/$archiveFile/build.res
 cp ./uploads/$archiveFile $buildDir
 
 cd $buildDir
@@ -24,7 +24,11 @@ parentProjectName=${parentProjectName#./}
 parentProjectName=${parentProjectName%.parent}
 cd $buildDir/*.parent
 
-mvn --batch-mode --quiet clean install
+mvn --batch-mode --quiet clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log 2>&1
+    # sdtout and std error are combined to preserve the interleaving of logs.
+
+# Save the exit code
+echo $? > ${ES_BUILD_LOCATION}/$archiveFile/build.res
 
 # Run a second round build with the new web servlet code
 # We can only do this here because we first need to have Xtext create the original file

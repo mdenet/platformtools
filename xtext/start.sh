@@ -1,5 +1,15 @@
-
 #! /bin/bash
+
+# clean any previous editor instances and builds
+rm -rf ${ES_BUILD_LOCATION}/*
+echo Old builds cleaned.
+
+rm -rf ${ES_UPLOAD_LOCATION}/*
+echo Old uploads cleaned.
+
+find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -maxdepth 1 -type f -not -name 'ROOT.war' -delete
+find ${ES_DEPLOY_FILE_LOCATION}/ -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \+ 
+echo Old editor instances cleaned.
 
 # start tomcat
 catalina.sh run &
@@ -12,6 +22,9 @@ catalina.sh run &
 
 # start editorserver
 node ./src/server.js &
+
+# start cron
+cron
 
 # wait for them all
 wait -n
