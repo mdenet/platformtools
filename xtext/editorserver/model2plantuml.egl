@@ -1,4 +1,3 @@
-[%import "shared.eol";%]
 @startuml
 skinparam roundCorner 0
 skinparam objectBorderThickness 1
