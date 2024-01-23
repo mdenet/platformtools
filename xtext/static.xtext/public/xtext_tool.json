@@ -2,15 +2,11 @@
     "tool": 
         {
             "id": "xtext",
-    
             "name": "Xtext",
     
             "functions": [
-    
                 {
-    
                     "id": "function-xtext",
-    
                     "name": "xtext",
     
                     "parameters": [ {"name":"languageName", "type":"text"}, 
@@ -21,27 +17,16 @@
                                     {"name":"language", "type":"text"}],
     
                     "returnType": "text",
-    
                     "path": "http://127.0.0.1:9000"
-    
                 }
-    
             ],
-    
-    
-    
-            "panelDefs": [
-    
+
+            "panelDefs": [    
                 {
-    
                     "id": "xtext-grammar",
-    
                     "name": "Xtext",
-    
                     "panelclass": "ProgramPanel",
-    
                     "icon": "xtext",
-    
                     "language": "xtext",
     
                     "buttons" : [ 
@@ -59,34 +44,7 @@
                           }
                     ]
     
-                },
-    
-                {
-    
-                    "id": "xtext-editor",
-    
-                    "name": "Xtext Language Instance",
-    
-                    "panelclass": "XtextEditorPanel",
-                    
-                    "generated": "true",
-    
-                    "icon": "xtext",
-    
-                    "buttons" : [ 
-                          { 
-                            "id": "help-button", 
-                            "icon": "info",
-                            "url": "https://",
-                            "hint": "" 
-                          }
-                    ]
-    
                 }
-
             ]
         }
-    
-    
-    } 
-    
+}
