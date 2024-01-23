@@ -24,7 +24,7 @@ parentProjectName=${parentProjectName#./}
 parentProjectName=${parentProjectName%.parent}
 cd $buildDir/*.parent
 
-mvn --batch-mode --quiet clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log 2>&1
+mvn --batch-mode --quiet -Dmaven.test.skip clean install > ${ES_BUILD_LOCATION}/$archiveFile/build.log 2>&1
     # sdtout and std error are combined to preserve the interleaving of logs.
 
 # Save the exit code
@@ -60,7 +60,7 @@ sed -i "s@DSL_BASE_NAME@$parentProjectName@" pom.xml
 
 cd $buildDir/*.parent
 
-mvn --batch-mode --quiet install
+mvn --batch-mode --quiet -Dmaven.test.skip install
 
 cd ..
 
