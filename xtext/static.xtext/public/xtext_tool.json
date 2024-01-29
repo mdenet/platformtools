@@ -44,7 +44,17 @@
                           }
                     ]
     
+                },
+                {
+                    "id": "xtend-code",
+                    "name": "Xtend",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtext",
+                    "language": "xtend",
+    
+                    "buttons" : [ ]
                 }
+
             ]
         }
 }
