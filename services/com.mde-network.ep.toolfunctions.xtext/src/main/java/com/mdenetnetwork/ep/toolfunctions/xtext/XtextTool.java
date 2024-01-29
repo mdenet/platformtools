@@ -45,10 +45,10 @@ public class XtextTool  {
 	}
 
 
-	public void run(String languageName, String baseName, String extension, String grammar, List<ProjectFile> projectFiles, OutputStream outputStream, JsonObject response) throws Exception {
+	public void run( String languageName, String baseName, String extension, 
+			         String grammar, String validator, String scopeProvider, String generator, 
+			         OutputStream outputStream, JsonObject response) throws Exception {
 
-
-		
 		// Create Xtext project with web editor enabled
 		File projectFolder = new File(PROJECT_PATH);
 		
@@ -69,18 +69,30 @@ public class XtextTool  {
 		
 		CliProjectsCreatorMain.main(args);
 		
-		
-		
-		
 		// Add activity files
+        //     TODO support multiple file types
+        final String projectSrcPath = PROJECT_PATH + baseName + "/src/" + baseName.replace('.', '/') + "/";
+        final String shortName = languageName.replace(baseName + ".", "");
+
 		if (grammar != null) {
-			final String grammarSrcPath = languageName.replace('.', '/');
-			final String xtextGrammarPath= PROJECT_PATH + baseName + "/src/" + grammarSrcPath  + ".xtext";
-			recreateGrammarFile(xtextGrammarPath, grammar);
+			final String xtextGrammarPath= projectSrcPath + shortName + ".xtext";
+			recreateProjectFile(xtextGrammarPath, grammar);
+		}
+
+		if (validator != null) {
+			final String xtextValidatorPath= projectSrcPath + "validation/" + shortName + "Validator.java";
+			recreateProjectFile(xtextValidatorPath, validator);		
 		}
 		
-		//TODO add activity files
+		if (scopeProvider != null) {
+			final String xtextScopeProviderPath= projectSrcPath + "scoping/" + shortName + "ScopeProvider.java";
+			recreateProjectFile(xtextScopeProviderPath, scopeProvider);
+		}
 		
+		if (generator != null) {
+			final String xtextGeneratorPath= projectSrcPath + "generator/" + shortName + "Generator.xtend";
+			recreateProjectFile(xtextGeneratorPath, generator);
+		}
 		
 		// Compress files for transfer to build server
 		
@@ -112,16 +124,16 @@ public class XtextTool  {
 	}
 
 	
-	private void recreateGrammarFile (String path, String contents) {
+	private void recreateProjectFile (String path, String contents) {
 		
-	    System.out.println("Re-creating grammar file: " + path);
+	    System.out.println("Re-creating file: " + path);
 	
 		try {
 			Files.writeString(Path.of(path), contents, StandardOpenOption.TRUNCATE_EXISTING);
 			
 		} catch (IOException e) {
 			
-			System.err.println("Error "+ e.toString() +" saving gramar file: " + path);
+			System.err.println("Error "+ e.toString() +" saving file: " + path);
 		}
 	}
 
