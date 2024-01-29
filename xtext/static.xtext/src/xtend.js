@@ -35,17 +35,24 @@ var xtendHighlightRules = function() {
         "start": [
             {token: "comment", regex: "\\/\\/.*$"},
             {token: "comment", regex: "\\/\\*", next : "comment"},
+            {token: "string", regex: "'''", next: "template-string"},
             {token: "string", regex: '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},
             {token: "string", regex: "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},
             {token: "constant.numeric", regex: "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},
             {token: "constant.numeric", regex: "0[xX][0-9a-fA-F]+\\b"},
             {token: "lparen", regex: "[\\[({]"},
             {token: "rparen", regex: "[\\])}]"},
+            {token: "code-embed-end", regex: "»", next: "template-string"}, // This is a bit naughty perhaps and will cause weird effects if students just type a closing guillemet
             {token: "keyword", regex: "\\b(?:" + keywords + ")\\b"}
         ],
         "comment": [
             {token: "comment", regex: ".*?\\*\\/", next : "start"},
             {token: "comment", regex: ".+"}
+        ],
+        "template-string": [
+            {token: "string", regex: "[^«]*'''", next: "start"},
+            {token: "string", "regex": "[^«]+"},
+            {token: "code-embed-start", regex: "«", next: "start"} // This is a bit naughty perhaps
         ]
     };
     this.normalizeRules();
