@@ -19,6 +19,9 @@ cd $buildDir
 # Build
 unzip -q $archiveFile
 
+projectSettings=$(find -name '*.mwe2')
+sed -i 's/preferXtendStubs = false/preferXtendStubs = true/g' $projectSettings
+
 parentProjectName=$(find -name '*.parent')
 parentProjectName=${parentProjectName#./}
 parentProjectName=${parentProjectName%.parent}
