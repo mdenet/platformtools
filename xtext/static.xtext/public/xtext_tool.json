@@ -13,7 +13,9 @@
                                     {"name":"baseName", "type":"text"},
                                     {"name":"extension", "type":"text"},
                                     {"name":"grammar", "type":"xtext"},
-                                    {"name":"projectFiles", "type":"text"}, 
+                                    {"name":"validator", "type":"xtend"},
+                                    {"name":"scopeprovider", "type":"xtend"},
+                                    {"name":"generator", "type":"xtend"},
                                     {"name":"language", "type":"text"}],
     
                     "returnType": "text",
@@ -34,7 +36,7 @@
                             "id": "action-button", 
                             "icon": "run",
                             "actionfunction": "function-xtext",
-                            "hint": "Generate Editor (Ctrl/Cmd+S)" 
+                            "hint": "Generate Editor" 
                           },
                           { 
                             "id": "help-button", 
@@ -43,7 +45,6 @@
                             "hint": "Xtext Gramar Reference" 
                           }
                     ]
-    
                 },
                 {
                     "id": "xtend-code",
@@ -53,8 +54,55 @@
                     "language": "xtend",
     
                     "buttons" : [ ]
+                },
+                {
+                    "id": "xtext-scopeprovider",
+                    "name": "Xtext Scope",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtend",
+                    "language": "xtend",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#scoping",
+                            "hint": "Xtext Scoping Reference" 
+                          }
+                    ]
+                },
+                {
+                    "id": "xtext-generator",
+                    "name": "Xtext Generator",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtend",
+                    "language": "xtend",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#code-generation",
+                            "hint": "Xtext Code Generation Reference" 
+                          }
+                    ]
+                },
+                {
+                    "id": "xtext-validator",
+                    "name": "Xtext Validator",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtend",
+                    "language": "xtend",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#validation",
+                            "hint": "Xtext Code Validation Reference" 
+                          }
+                    ]
                 }
-
             ]
         }
 }
