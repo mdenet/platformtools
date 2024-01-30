@@ -87,18 +87,18 @@ class DSLNAMEServlet extends XtextServlet {
 		var HttpSessionWrapper sessionWrapper
 		var Map<String, String> parameters = new HashMap
 
-		new(HttpServletRequest req) throws IOException {
+		new(HttpServletRequest req, String serviceID) throws IOException {
 			this.request = req
-			initialise
+			
+			initialise(serviceID)
 		}
 
-		private def initialise() throws IOException {
+		private def initialise(String serviceID) throws IOException {
 			for (param : request.parameterMap.keySet) {
 				parameters.put(param, request.getParameter(param))
 			}
 
 			val jsoParameters = JsonParser.parseReader(request.getReader()).getAsJsonObject()
-			val serviceID = request.getPathInfo().substring(1)
 
 			parameters.put(SERVICE_TYPE, serviceID);
 
@@ -268,7 +268,7 @@ class DSLNAMEServlet extends XtextServlet {
 	 * - "resource": file name of the xtext file, so that code generator can access this in the file names it generates
 	 */
 	private def GeneratorService.GeneratedArtifacts doGenerate(HttpServletRequest req) throws IOException {
-		val context = new HttpServiceContext(req)
+		val context = new HttpServiceContext(req, "generate")
 
 		val emfURI = URI.createURI("input.LANGUAGE_EXT")
 		val resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(emfURI)
