@@ -25,10 +25,20 @@
                 "returnType": "diagram",
 
                 "path": "{{BASE-URL}}/xtext-service/to-diagram"
+            },
+
+            {
+                "id": "function-xtext-code-generate",
+                "name": "xtext-to-generated-code",
+
+                "parameters": [ {"name":"model", "type":"xtext-generated"},
+                                {"name":"fileName", "type":"text"},
+                                {"name":"language", "type":"text"}],
+
+                "returnType": "generatedFiles",
+
+                "path": "{{BASE-URL}}/xtext-service/runGenerator"
             }
-
-
-
         ],
         "panelDefs": [
             {
@@ -40,6 +50,12 @@
                 "language": "xtext-generated",
 
                 "buttons" : [
+                    {
+                        "id": "generate-code-button", 
+                        "icon": "run",
+                        "actionfunction": "function-xtext-code-generate",
+                        "hint": "Generate code"
+                    },
                     {
                         "id": "to-diagram-button", 
                         "icon": "diagram-generate",

@@ -46,13 +46,13 @@ languagePackageName=$(find -name 'web')
 languagePackageName=${languagePackageName#./}
 languagePackageName=${languagePackageName////.}
 cd `find -name 'web'`
-languageClassName=$(find -name '*Servlet.java')
+languageClassName=$(find -name '*Servlet.xtend')
 languageClassName=${languageClassName#./}
-languageClassName=${languageClassName%Servlet.java}
-cp /editorserver/Servlet.java *Servlet.java
-sed -i "s@DSLQNAME@$languagePackageName@" *Servlet.java
-sed -i "s@DSLNAME@$languageClassName@" *Servlet.java
-sed -i "s@LANGUAGE_EXT@$languageExtension@" *Servlet.java
+languageClassName=${languageClassName%Servlet.xtend}
+cp /editorserver/Servlet.xtend *Servlet.xtend
+sed -i "s@DSLQNAME@$languagePackageName@" *Servlet.xtend
+sed -i "s@DSLNAME@$languageClassName@" *Servlet.xtend
+sed -i "s@LANGUAGE_EXT@$languageExtension@" *Servlet.xtend
 
 cp /editorserver/model2plantuml.egl ./model2plantuml.egl
 
