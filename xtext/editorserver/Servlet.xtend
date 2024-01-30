@@ -73,12 +73,12 @@ class DSLNAMEServlet extends XtextServlet {
 	}
 
 	private static class GeneratedFile {
-		public String name
-		public String contents
+		public String path
+		public String content
 
-		new(String name, String contents) {
-			this.name = name
-			this.contents = contents
+		new(String path, String content) {
+			this.path = path
+			this.content = content
 		}
 	}
 
