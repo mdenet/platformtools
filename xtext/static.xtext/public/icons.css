@@ -1,3 +1,7 @@
 .mif-xtext::before {
 	content: url("./icons/xtext16.png");
 }
+
+.mif-xtend::before {
+	content: url("./icons/xtend16.png");
+}
