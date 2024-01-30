@@ -76,8 +76,16 @@ class DSLNAMEServlet extends XtextServlet {
 		public String path
 		public String content
 
+		static val DEFAULT_LOCATION = "DEFAULT_OUTPUT"
+
 		new(String path, String content) {
-			this.path = path
+			// Strip the weird location code Xtext web adds by default
+			if (path.startsWith(DEFAULT_LOCATION)) {
+				this.path = path.replaceFirst(DEFAULT_LOCATION, "src-gen/")
+			} else {
+				this.path = path
+			}
+
 			this.content = content
 		}
 	}
