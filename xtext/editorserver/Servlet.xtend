@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import java.util.ArrayList
 import java.util.HashMap
 import java.util.List
 import java.util.Map
@@ -68,7 +69,7 @@ class DSLNAMEServlet extends XtextServlet {
 	}
 
 	private static class GenerationResponse implements IResponse {
-		public List<GeneratedFile> generatedFiles
+		public List<GeneratedFile> generatedFiles = new ArrayList
 	}
 
 	private static class GeneratedFile {
