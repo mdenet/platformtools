@@ -45,10 +45,10 @@ public class XtextTool  {
 	}
 
 
-	public void run(String languageName, String baseName, String extension, String grammar, List<ProjectFile> projectFiles, OutputStream outputStream, JsonObject response) throws Exception {
+	public void run( String languageName, String baseName, String extension, 
+			         String grammar, String validator, String scopeProvider, String generator, 
+			         OutputStream outputStream, JsonObject response) throws Exception {
 
-
-		
 		// Create Xtext project with web editor enabled
 		File projectFolder = new File(PROJECT_PATH);
 		
@@ -69,18 +69,31 @@ public class XtextTool  {
 		
 		CliProjectsCreatorMain.main(args);
 		
-		
-		
-		
 		// Add activity files
-		if (grammar != null) {
-			final String grammarSrcPath = languageName.replace('.', '/');
-			final String xtextGrammarPath= PROJECT_PATH + baseName + "/src/" + grammarSrcPath  + ".xtext";
-			recreateGrammarFile(xtextGrammarPath, grammar);
+        final String languagePath = PROJECT_PATH + baseName + "/src/" + baseName.replace('.', '/');
+        final String languageParentPath = Path.of(languagePath).getParent().toString();
+        
+        final String shortName = languageName.replace(baseName + ".", "");
+
+		if (grammar != null && !grammar.equals("undefined") ) {
+			final String xtextGrammarPath= languagePath + "/" + shortName + ".xtext";
+			recreateProjectFile(xtextGrammarPath, grammar);
+		}
+
+		if (validator != null && !validator.equals("undefined") ) {
+			final String xtextValidatorPath= languageParentPath + "/validation/" + shortName + "Validator.xtend";
+			recreateProjectFile(xtextValidatorPath, validator);		
 		}
 		
-		//TODO add activity files
+		if (scopeProvider != null && !scopeProvider.equals("undefined") ) {
+			final String xtextScopeProviderPath= languageParentPath + "/scoping/" + shortName + "ScopeProvider.xtend";
+			recreateProjectFile(xtextScopeProviderPath, scopeProvider);
+		}
 		
+		if (generator != null && !generator.equals("undefined") ) {
+			final String xtextGeneratorPath= languageParentPath + "/generator/" + shortName + "Generator.xtend";
+			recreateProjectFile(xtextGeneratorPath, generator);
+		}
 		
 		// Compress files for transfer to build server
 		
@@ -112,23 +125,26 @@ public class XtextTool  {
 	}
 
 	
-	private void recreateGrammarFile (String path, String contents) {
-		
-	    System.out.println("Re-creating grammar file: " + path);
-	
+	private void recreateProjectFile (String path, String contents) {
+  
+	    System.out.println("Re-creating file: " + path);
+    
+        Path filePath= Path.of(path);
 		try {
-			Files.writeString(Path.of(path), contents, StandardOpenOption.TRUNCATE_EXISTING);
+            if ( !Files.exists(filePath) ){
+                System.out.println("File did not exist. Created.");
+                Files.createDirectories(filePath.getParent());
+                Files.createFile(filePath);
+            }
+
+			Files.writeString(filePath, contents);
 			
 		} catch (IOException e) {
 			
-			System.err.println("Error "+ e.toString() +" saving gramar file: " + path);
+			System.err.println("Error "+ e.toString() +" saving file: " + path);
 		}
 	}
 
-	private void recreateProjectFiles () {
-		//TODO recreate project files
-	}
-	
 	
 	private void compressDirectory(File dir, String parentDir, ZipOutputStream output )  
 			throws FileNotFoundException, IOException {

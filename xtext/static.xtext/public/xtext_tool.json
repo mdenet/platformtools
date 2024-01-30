@@ -13,7 +13,9 @@
                                     {"name":"baseName", "type":"text"},
                                     {"name":"extension", "type":"text"},
                                     {"name":"grammar", "type":"xtext"},
-                                    {"name":"projectFiles", "type":"text"}, 
+                                    {"name":"validator", "type":"text"},
+                                    {"name":"scopeprovider", "type":"text"},
+                                    {"name":"generator", "type":"text"},
                                     {"name":"language", "type":"text"}],
     
                     "returnType": "text",
@@ -41,6 +43,57 @@
                             "icon": "info",
                             "url": "https://www.eclipse.org/Xtext/documentation/301_grammarlanguage.html",
                             "hint": "Xtext Gramar Reference" 
+                          }
+                    ]
+    
+                },
+                {
+                    "id": "xtext-scopeprovider",
+                    "name": "Xtext Scope",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtext",
+                    "language": "text",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#scoping",
+                            "hint": "Xtext Scoping Reference" 
+                          }
+                    ]
+    
+                },
+                {
+                    "id": "xtext-generator",
+                    "name": "Xtext Generator",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtext",
+                    "language": "text",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#code-generation",
+                            "hint": "Xtext Code Generation Reference" 
+                          }
+                    ]
+    
+                },
+                {
+                    "id": "xtext-validator",
+                    "name": "Xtext Validator",
+                    "panelclass": "ProgramPanel",
+                    "icon": "xtext",
+                    "language": "text",
+    
+                    "buttons" : [ 
+                          { 
+                            "id": "help-button", 
+                            "icon": "info",
+                            "url": "https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#validation",
+                            "hint": "Xtext Code Validation Reference" 
                           }
                     ]
     
