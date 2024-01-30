@@ -1,7 +1,6 @@
 package DSLQNAME
 
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import com.google.inject.Injector
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
@@ -10,9 +9,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.util.ArrayList
-import java.util.HashMap
 import java.util.List
-import java.util.Map
 import java.util.Set
 import java.util.stream.Collectors
 import javax.servlet.ServletException
@@ -95,16 +92,17 @@ class DSLNAMEServlet extends XtextServlet {
 		var HttpServletRequest request
 		var HttpSessionWrapper sessionWrapper
 		var String serviceID
-		
+
 		private static class Request {
-			public String resource;
-			public String fullText;
+			public String fileName
+			public String model
 		}
+
 		var Request reqJSON
 
 		new(HttpServletRequest req, String serviceID) throws IOException {
 			this.request = req
-			
+
 			reqJSON = new Gson().fromJson(request.reader, Request)
 			this.serviceID = serviceID
 		}
@@ -116,8 +114,8 @@ class DSLNAMEServlet extends XtextServlet {
 		override String getParameter(String key) {
 			switch (key) {
 				case SERVICE_TYPE: serviceID
-				case "resource": reqJSON.resource
-				case "fullText": reqJSON.fullText
+				case "resource": reqJSON.fileName
+				case "fullText": reqJSON.model
 				case "allArtifacts": "true"
 			}
 		}

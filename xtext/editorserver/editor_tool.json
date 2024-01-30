@@ -31,9 +31,8 @@
                 "id": "function-xtext-code-generate",
                 "name": "xtext-to-generated-code",
 
-                "parameters": [ {"name":"fullText", "type":"xtext-generated"},
-                                {"name":"resource", "type":"text"},
-                                {"name":"allArtifacts", "type":"text"},
+                "parameters": [ {"name":"model", "type":"xtext-generated"},
+                                {"name":"fileName", "type":"text"},
                                 {"name":"language", "type":"text"}],
 
                 "returnType": "generatedFiles",
