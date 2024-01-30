@@ -82,38 +82,36 @@ class DSLNAMEServlet extends XtextServlet {
 		}
 	}
 
-	private static class HttpServiceContext implements IServiceContext {
+	private static class GenerationHttpServiceContext implements IServiceContext {
 
 		var HttpServletRequest request
 		var HttpSessionWrapper sessionWrapper
-		var Map<String, String> parameters = new HashMap
+		var String serviceID
+		
+		private static class Request {
+			public String resource;
+			public String fullText;
+		}
+		var Request reqJSON
 
 		new(HttpServletRequest req, String serviceID) throws IOException {
 			this.request = req
 			
-			initialise(serviceID)
-		}
-
-		private def initialise(String serviceID) throws IOException {
-			for (param : request.parameterMap.keySet) {
-				parameters.put(param, request.getParameter(param))
-			}
-
-			val jsoParameters = JsonParser.parseReader(request.getReader()).getAsJsonObject()
-
-			parameters.put(SERVICE_TYPE, serviceID);
-
-			for (jsoParam : jsoParameters.entrySet) {
-				parameters.put(jsoParam.getKey(), jsoParam.getValue().toString())
-			}
+			reqJSON = new Gson().fromJson(request.reader, Request)
+			this.serviceID = serviceID
 		}
 
 		override Set<String> getParameterKeys() {
-			parameters.keySet
+			#["resource", "fullText", "allArtifacts", SERVICE_TYPE].toSet
 		}
 
 		override String getParameter(String key) {
-			parameters.get(key)
+			switch (key) {
+				case SERVICE_TYPE: serviceID
+				case "resource": reqJSON.resource
+				case "fullText": reqJSON.fullText
+				case "allArtifacts": "true"
+			}
 		}
 
 		override ISession getSession() {
@@ -269,7 +267,7 @@ class DSLNAMEServlet extends XtextServlet {
 	 * - "resource": file name of the xtext file, so that code generator can access this in the file names it generates
 	 */
 	private def GeneratorService.GeneratedArtifacts doGenerate(HttpServletRequest req) throws IOException {
-		val context = new HttpServiceContext(req, "generate")
+		val context = new GenerationHttpServiceContext(req, "generate")
 
 		val emfURI = URI.createURI("input.LANGUAGE_EXT")
 		val resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(emfURI)
