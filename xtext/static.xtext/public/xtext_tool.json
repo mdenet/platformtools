@@ -49,7 +49,7 @@
                     "id": "xtend-code",
                     "name": "Xtend",
                     "panelclass": "ProgramPanel",
-                    "icon": "xtext",
+                    "icon": "xtend",
                     "language": "xtend",
     
                     "buttons" : [ ]
