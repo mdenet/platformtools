@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -25,10 +29,17 @@ import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.util.DisposableRegistry;
+import org.eclipse.xtext.web.server.IServiceContext;
+import org.eclipse.xtext.web.server.ISession;
 import org.eclipse.xtext.web.server.InvalidRequestException;
+import org.eclipse.xtext.web.server.XtextServiceDispatcher;
+import org.eclipse.xtext.web.server.generator.GeneratorService;
+import org.eclipse.xtext.web.servlet.HttpSessionWrapper;
 import org.eclipse.xtext.web.servlet.XtextServlet;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.inject.Injector;
 
 import net.sourceforge.plantuml.FileFormat;
@@ -53,178 +64,249 @@ public class DSLNAMEServlet extends XtextServlet {
         this.disposableRegistry = injector.getInstance(DisposableRegistry.class);
     }
 
-    private class ToXMIResponse {
-        public String output;
-    }
+	private interface IResponse {
+	}
 
-    private class ErrorResponse {
-        public String error;
-    }
+	private class ToXMIResponse implements IResponse {
+		public String output;
+	}
 
-    private class ToDiagramResponse {
-        public String diagram;
-    }
+	private class ErrorResponse implements IResponse {
+		public String error;
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String serviceID = req.getPathInfo().substring(1);
-        if ("to-xmi".equals(serviceID)) {
-            String sResult = exportXMI(req);
+	private class ToDiagramResponse implements IResponse {
+		public String diagram;
+	}
+	
+	private class GenerationResponse implements IResponse{
+		public List<GeneratedFile> generatedFiles;
+	}
+	
+	private class GeneratedFile {
+		public String name;
+		public String contents;
+		
+		public GeneratedFile(String name, String contents) {
+			this.name = name;
+			this.contents = contents;
+		}
+	}
 
-            if (sResult != "") {
-                resp.setStatus(200);
-                resp.setContentType("application/json");
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String serviceID = req.getPathInfo().substring(1);
+		IResponse response = null;
 
-                ToXMIResponse r = new ToXMIResponse();
-                r.output = sResult;
+		switch (serviceID) {
+		case "to-xmi":
+			String sResult = exportXMI(req);
 
-                PrintWriter pw = resp.getWriter();
+			if (sResult != "") {
+				response = new ToXMIResponse();
+				((ToXMIResponse) response).output = sResult;
+			} else {
+				response = new ErrorResponse();
+				((ErrorResponse) response).error = "Unable to generate XMI.";
+			}
 
-                pw.print(new Gson().toJson(r));
+			break;
+		case "to-diagram":
+			sResult = exportDiagram(req);
 
-                pw.close();
-            } else {
-                resp.setStatus(200);
-                resp.setContentType("application/json");
+			if (sResult != "") {
+				response = new ToDiagramResponse();
+				((ToDiagramResponse) response).diagram = sResult;
+			} else {
+				response = new ErrorResponse();
+				((ErrorResponse) response).error = "Unable to generate diagram.";
+			}
 
-                ErrorResponse r = new ErrorResponse();
-                r.error = "Unable to generate XMI.";
+			break;
+		case "runGenerator":
+			var result = doGenerate(req);
+			
+			if (result != null) {
+				response = new GenerationResponse();
+				for (var file: result.getArtifacts()) {
+					((GenerationResponse)response).generatedFiles.add(new GeneratedFile(file.getName(), file.getContent()));
+				}
+			} else {
+				response = new ErrorResponse();
+				((ErrorResponse) response).error = "Unable to run code generator.";
+			}
+			
+			break;
+		default:
+			super.doPost(req, resp);
+			return;
+		}
 
-                PrintWriter pw = resp.getWriter();
+		resp.setStatus(HttpServletResponse.SC_OK);
+		resp.setContentType("application/json");
+		PrintWriter pw = resp.getWriter();
 
-                pw.print(new Gson().toJson(r));
+		pw.print(new Gson().toJson(response));
 
-                pw.close();
-            }
-        } else if ("to-diagram".equals(serviceID)) {
-            String sResult = exportDiagram(req);
+		pw.close();
+	}
 
-            if (sResult != "") {
-                resp.setStatus(200);
-                resp.setContentType("application/json");
+	private final class HttpServiceContext implements IServiceContext {
 
-                ToDiagramResponse r = new ToDiagramResponse();
-                r.diagram = sResult;
+		private final HttpServletRequest request;
+		private HttpSessionWrapper sessionWrapper;		
+		private final Map<String, String> parameters = new HashMap<>();
+		
+		public HttpServiceContext (HttpServletRequest req) throws IOException {
+			this.request = req;
+			initialise();
+		}
+		
+		private void initialise() throws IOException {
+			for (String param: request.getParameterMap().keySet()) {
+				parameters.put(param, request.getParameter(param));
+			}
+			
+			JsonObject jsoParameters = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+			String serviceID = request.getPathInfo().substring(1);
+			
+			parameters.put(SERVICE_TYPE, serviceID);
+			
+			for (var jsoParam: jsoParameters.entrySet()) {
+				parameters.put(jsoParam.getKey(), jsoParam.getValue().toString());
+			}
+		}
+		
+		@Override
+		public Set<String> getParameterKeys() {
+			return parameters.keySet();
+		}
 
-                PrintWriter pw = resp.getWriter();
+		@Override
+		public String getParameter(String key) {
+			return parameters.get(key);
+		}
 
-                pw.print(new Gson().toJson(r));
-
-                pw.close();
-            } else {
-                resp.setStatus(200);
-                resp.setContentType("application/json");
-
-                ErrorResponse r = new ErrorResponse();
-                r.error = "Unable to generate XMI.";
-
-                PrintWriter pw = resp.getWriter();
-
-                pw.print(new Gson().toJson(r));
-
-                pw.close();
-            }
-        } else {
-            super.doPost(req, resp);
-        }
-    }
-
-    private class RequestStructure {
-        public String input;
-    }
+		@Override
+		public ISession getSession() {
+			if (sessionWrapper == null) {
+				sessionWrapper = new HttpSessionWrapper(request.getSession(true));
+			}
+			return sessionWrapper;
+		}
+	}
+	
+	private class RequestStructure {
+		public String input;
+	}
 
     /**
      * Handles the 'to-xmi' command by transforming the model code in parameter 'input', given in the Xtext format of the DSML managed by this editor, into a regular XMI file.
      */
-    private String exportXMI(HttpServletRequest req)
-            throws InvalidRequestException.UnknownLanguageException, IOException {
-        StringBuffer jb = new StringBuffer();
-        String line = null;
-        BufferedReader reader = req.getReader();
-        while ((line = reader.readLine()) != null)
-            jb.append(line);
+	private String exportXMI(HttpServletRequest req)
+			throws InvalidRequestException.UnknownLanguageException, IOException {
+		BufferedReader reader = req.getReader();
+		RequestStructure reqObj = new Gson().fromJson(reader, RequestStructure.class);
 
-        RequestStructure reqObj = new Gson().fromJson(jb.toString(), RequestStructure.class);
+		URI emfURI = URI.createURI("input.LANGUAGE_EXT");
+		IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
+				.getResourceServiceProvider(emfURI);
+		if (resourceServiceProvider == null) {
+			throw new InvalidRequestException.UnknownLanguageException("Unable to identify the Xtext language.");
+		}
 
-        URI emfURI = URI.createURI("input.LANGUAGE_EXT");
-        IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
-                .getResourceServiceProvider(emfURI);
-        if (resourceServiceProvider == null) {
-            throw new InvalidRequestException.UnknownLanguageException("Unable to identify the Xtext language.");
-        }
+		Injector injector = resourceServiceProvider.get(Injector.class);
 
-        Injector injector = resourceServiceProvider.get(Injector.class);
+		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 
-        XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
+		Resource xtextResource = resourceSet.createResource(emfURI);
+		xtextResource.load(new ByteArrayInputStream(reqObj.input.getBytes()), null);
+		EcoreUtil.resolveAll(xtextResource);
 
-        Resource xtextResource = resourceSet.createResource(emfURI);
-        xtextResource.load(new ByteArrayInputStream(reqObj.input.getBytes()), null);
-        EcoreUtil.resolveAll(xtextResource);
+		Resource xmiResource = resourceSet.createResource(URI.createFileURI("result.xmi"));
+		xmiResource.getContents().add(xtextResource.getContents().get(0));
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			xmiResource.save(baos, null);
+			return baos.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        Resource xmiResource = resourceSet.createResource(URI.createFileURI("result.xmi"));
-        xmiResource.getContents().add(xtextResource.getContents().get(0));
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            xmiResource.save(baos, null);
-            return baos.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
+		return "";
+	}
 
     /**
      * Handles the 'to-diagram' command by transforming the model code in parameter 'input', given in the Xtext format of the DSML managed by this editor, into an SVG object diagram generated by PlantUML.
      */
-    private String exportDiagram(HttpServletRequest req)
-            throws InvalidRequestException.UnknownLanguageException, IOException {
-        StringBuffer jb = new StringBuffer();
-        String line = null;
-        BufferedReader reader = req.getReader();
-        while ((line = reader.readLine()) != null)
-            jb.append(line);
+	private String exportDiagram(HttpServletRequest req)
+			throws InvalidRequestException.UnknownLanguageException, IOException {
+		BufferedReader reader = req.getReader();
+		RequestStructure reqObj = new Gson().fromJson(reader, RequestStructure.class);
 
-        RequestStructure reqObj = new Gson().fromJson(jb.toString(), RequestStructure.class);
+		URI emfURI = URI.createURI("input.LANGUAGE_EXT");
+		IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
+				.getResourceServiceProvider(emfURI);
+		if (resourceServiceProvider == null) {
+			throw new InvalidRequestException.UnknownLanguageException("Unable to identify the Xtext language.");
+		}
 
-        URI emfURI = URI.createURI("input.LANGUAGE_EXT");
-        IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
-                .getResourceServiceProvider(emfURI);
-        if (resourceServiceProvider == null) {
-            throw new InvalidRequestException.UnknownLanguageException("Unable to identify the Xtext language.");
-        }
+		Injector injector = resourceServiceProvider.get(Injector.class);
 
-        Injector injector = resourceServiceProvider.get(Injector.class);
+		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 
-        XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
+		Resource xtextResource = resourceSet.createResource(emfURI);
+		xtextResource.load(new ByteArrayInputStream(reqObj.input.getBytes()), null);
+		EcoreUtil.resolveAll(xtextResource);
 
-        Resource xtextResource = resourceSet.createResource(emfURI);
-        xtextResource.load(new ByteArrayInputStream(reqObj.input.getBytes()), null);
-        EcoreUtil.resolveAll(xtextResource);
+		try {
+			EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
 
-        try {
-            EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
+			String eglCode = new BufferedReader(
+					new InputStreamReader(getClass().getResourceAsStream("model2plantuml.egl"))).lines()
+					.collect(Collectors.joining("\n"));
+			module.parse(eglCode);
 
-            String eglCode = new BufferedReader(
-                    new InputStreamReader(getClass().getResourceAsStream("model2plantuml.egl"))).lines()
-                    .collect(Collectors.joining("\n"));
-            module.parse(eglCode);
+			InMemoryEmfModel model = new InMemoryEmfModel(xtextResource);
+			model.setName("M");
 
-            InMemoryEmfModel model = new InMemoryEmfModel(xtextResource);
-            model.setName("M");
+			module.getContext().getModelRepository().addModel(model);
+			String plantUml = module.execute() + "";
 
-            module.getContext().getModelRepository().addModel(model);
-            String plantUml = module.execute() + "";
+			SourceStringReader ssr = new SourceStringReader(plantUml);
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ssr.outputImage(os, new FileFormatOption(FileFormat.SVG));
+			os.close();
 
-            SourceStringReader ssr = new SourceStringReader(plantUml);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ssr.outputImage(os, new FileFormatOption(FileFormat.SVG));
-            os.close();
+			return new String(os.toByteArray(), Charset.forName("UTF-8"));
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
+	}
 
-            return new String(os.toByteArray(), Charset.forName("UTF-8"));
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
-    }
+	/**
+	 * Expect to receive the following parameters:
+	 * 
+	 * - "fullText": text of model (xtext file)
+	 * - "allArtifacts": Boolean to indicate if we need all files, should normally be true
+	 * - "resource": file name of the xtext file, so that code generator can access this in the file names it generates
+	 */
+	private GeneratorService.GeneratedArtifacts doGenerate(HttpServletRequest req) throws IOException {
+		HttpServiceContext context = new HttpServiceContext(req);
+		
+		URI emfURI = URI.createURI("input.LANGUAGE_EXT");
+		IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
+				.getResourceServiceProvider(emfURI);
+		if (resourceServiceProvider == null) {
+			throw new InvalidRequestException.UnknownLanguageException("Unable to identify the Xtext language.");
+		}
+
+		Injector injector = resourceServiceProvider.get(Injector.class);
+
+		XtextServiceDispatcher serviceDispatcher = injector.getInstance(XtextServiceDispatcher.class);
+		XtextServiceDispatcher.ServiceDescriptor service = serviceDispatcher.getService(context);
+
+		return (GeneratorService.GeneratedArtifacts) service.getService().apply();		
+	}
 
     public void destroy() {
         if (disposableRegistry != null) {
