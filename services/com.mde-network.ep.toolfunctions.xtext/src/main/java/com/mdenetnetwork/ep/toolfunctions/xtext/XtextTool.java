@@ -74,22 +74,22 @@ public class XtextTool  {
         final String projectSrcPath = PROJECT_PATH + baseName + "/src/" + baseName.replace('.', '/') + "/";
         final String shortName = languageName.replace(baseName + ".", "");
 
-		if (grammar != null) {
+		if (grammar != null && !grammar.equals("undefined") ) {
 			final String xtextGrammarPath= projectSrcPath + shortName + ".xtext";
 			recreateProjectFile(xtextGrammarPath, grammar);
 		}
 
-		if (validator != null) {
-			final String xtextValidatorPath= projectSrcPath + "validation/" + shortName + "Validator.java";
+		if (validator != null && !validator.equals("undefined") ) {
+			final String xtextValidatorPath= projectSrcPath + "validation/" + shortName + "Validator.xtend";
 			recreateProjectFile(xtextValidatorPath, validator);		
 		}
 		
-		if (scopeProvider != null) {
-			final String xtextScopeProviderPath= projectSrcPath + "scoping/" + shortName + "ScopeProvider.java";
+		if (scopeProvider != null && !scopeProvider.equals("undefined") ) {
+			final String xtextScopeProviderPath= projectSrcPath + "scoping/" + shortName + "ScopeProvider.xtend";
 			recreateProjectFile(xtextScopeProviderPath, scopeProvider);
 		}
 		
-		if (generator != null) {
+		if (generator != null && !generator.equals("undefined") ) {
 			final String xtextGeneratorPath= projectSrcPath + "generator/" + shortName + "Generator.xtend";
 			recreateProjectFile(xtextGeneratorPath, generator);
 		}
@@ -125,11 +125,18 @@ public class XtextTool  {
 
 	
 	private void recreateProjectFile (String path, String contents) {
-		
+  
 	    System.out.println("Re-creating file: " + path);
-	
+    
+        Path filePath= Path.of(path);
 		try {
-			Files.writeString(Path.of(path), contents, StandardOpenOption.TRUNCATE_EXISTING);
+            if ( !Files.exists(filePath) ){
+                System.out.println("File did not exist. Created.");
+                Files.createDirectories(filePath.getParent());
+                Files.createFile(filePath);
+            }
+
+			Files.writeString(filePath, contents);
 			
 		} catch (IOException e) {
 			
@@ -137,10 +144,6 @@ public class XtextTool  {
 		}
 	}
 
-	private void recreateProjectFiles () {
-		//TODO recreate project files
-	}
-	
 	
 	private void compressDirectory(File dir, String parentDir, ZipOutputStream output )  
 			throws FileNotFoundException, IOException {
