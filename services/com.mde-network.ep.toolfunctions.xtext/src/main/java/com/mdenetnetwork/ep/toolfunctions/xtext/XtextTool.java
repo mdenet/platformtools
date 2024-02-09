@@ -73,7 +73,7 @@ public class XtextTool  {
         final String languagePath = PROJECT_PATH + baseName + "/src/" + baseName.replace('.', '/');
         final String languageParentPath = Path.of(languagePath).getParent().toString();
         
-        final String shortName = languageName.replace(baseName + ".", "");
+        final String shortName = languageName.substring(languageName.lastIndexOf(".") + 1);
 
 		if (grammar != null && !grammar.equals("undefined") ) {
 			final String xtextGrammarPath= languagePath + "/" + shortName + ".xtext";
