@@ -7,8 +7,8 @@
                 "id": "function-xtext-to-xmi",
                 "name": "xtext-to-xmi",
 
-                "parameters": [ {"name":"input", "type":"xtext-generated"}, 
-                                {"name":"language", "type":"text"}],
+                "parameters": [ {"name":"input", "type":"xtext-generated","instanceOf": "metamodel"},
+                                {"name":"metamodel", "type":"ecore"}],
 
                 "returnType": "xmi",
 
