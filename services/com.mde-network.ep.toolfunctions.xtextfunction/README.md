@@ -1,5 +1,6 @@
 # MDENet Xtext Tool Function
 
+## Running the Tool
 Prerequisites:
 - [Maven](https://maven.apache.org/)
 
@@ -39,3 +40,113 @@ This section documents the environment variables supported by the Editor Server.
 | NODE_VERSION            | String | The version of Node.js to use. | 19.0.0 |
 |  TS_PORT                | Int | The port of the education platform tool service | 1234 |
 | XTEXT_ES_STOP_CRON_TIME | Cron Time | The date time to stop the editor server in unix CRON format. If unset the editor server will not stop. | `* 4 * * *` | 
+
+
+## API
+
+### Actions
+
+#### Function Xtext
+Upload Xtext project files.
+
+`POST /services/xtext`
+
+##### Request Body JSON 
+|  Attribute    | Description           | File format | Required |
+| --------      | -------               | ------- | ---- |
+| **languageName**  | Name of the language in the java class format e.g. `com.mdenet.test.MyLang` | - | Yes |
+| **baseName**      | The name of the project's containing folder                                 | - | Yes |
+| **extension**     |  The file extension to use for the language's files                         | - | Yes |
+| **grammar**       | The Xtext grammar                                                           | Xtext grammar | Yes |
+| validator     | The validator source code                                                   | Xtend | No |
+| scopeprovider | The scope provider source code                                              | Xtend | No |
+| generator     | The generator source code                                                   | Xtend | No |
+| **language**      | Set to `xtext` for Xtext functions                                          | - | Yes |
+
+##### Example Request
+```
+{
+    "languageName": "uk.ac.kcl.inf.mdd1.turtles.Turtles",
+    "baseName": "uk.ac.kcl.inf.mdd1.turtles",
+    "extension": "turtles",
+    "grammar": "grammar uk.kcl.inf.mdd1.Turtles...",
+    "validator": "undefined",
+    "scopeprovider": "undefined",
+    "generator": "undefined",
+    "language": "xtext"
+}
+```
+
+##### Response `200` Success
+
+|  Attribute         | Description             | File format |
+| --------           | -------                 | ------- |
+| editorUrl          | The URL to the provided project's editor that will be available once processed | - |
+| editorStatusUrl    | URL of the endpoint to check for the editor's availability | - |
+| output             | The terminal output from the tool  | - |
+
+##### Example Response `200` Success
+
+```
+{
+    "editorUrl": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/editors/387febee5438973211d6ec302b76c251/",
+    "editorStatusUrl": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/project/xtext/editors/387febee5438973211d6ec302b76c251/status",
+    "output": ""
+}
+```
+
+##### Response Invalid Parameters
+|  Attribute         | Description             | File format |
+| --------           | -------                 | ------- |
+| output             | The terminal output from the tool. | Text |
+| error              | The error that occurred.  | Text |
+
+
+##### Example Response Invalid Parameters
+
+```
+{
+    "output":"Cannot invoke \"com.google.gson...",
+    "error":"Cannot invoke \"com.google.gson..."
+}
+```
+
+### Editors
+
+#### Status
+Returns the status of an uploaded Xtext project's editor.
+
+`GET /project/xtext/editors/{PROJECT_ID}/status`
+
+
+##### Response `200` Success
+
+|  Attribute         | Description                        | File format |
+| --------           | -------                            | ------- |
+| editorReady          | True if ready                    | - |
+| output             | The terminal output from the tool  | - |
+
+##### Example Response `200` Success
+
+```
+{
+    "editorReady":false,
+    "output":"output":"SLF4J: Failed to load class..."
+}
+```
+
+##### Response Invalid Editor ID
+|  Attribute         | Description                        | File format |
+| --------           | -------                            | -------     |
+| editorReady        | `false` | Text                     |
+| output             | The terminal output from the tool  | Text        |
+
+
+##### Example Response Invalid Parameters
+
+```
+{
+    "editorReady":false,
+    "output":""
+}
+```
