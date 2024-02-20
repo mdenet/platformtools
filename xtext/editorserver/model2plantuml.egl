@@ -64,7 +64,8 @@ operation Any getReferenced() {
 	return referenced;
 }
 operation getReferenceLabel(s, t, r) {
-	
+
+// SZ: Commented out rather than deleted as we may wish to review showing all reference labels in due course.	
 //	for (ref in s.eClass().getEAllReferences()) {
 //		if (ref.eType.isSuperTypeOf(t.eClass()) and r <> ref) {
 			return " : " + r.name;
