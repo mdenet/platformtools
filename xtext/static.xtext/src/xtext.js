@@ -65,6 +65,7 @@ var xtextHighlightRules = require("./xtext_highlight_rules").xtextHighlightRules
 var Mode = function() {
     this.HighlightRules = xtextHighlightRules;
     this.$behaviour = this.$defaultBehaviour;
+    this.lineCommentStart = "//";
 };
 oop.inherits(Mode, TextMode);
 
