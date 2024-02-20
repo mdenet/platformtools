@@ -24,7 +24,7 @@ object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%] #[%=colors.get(e.eClass().e
 [%for (v in r.at(0).select(r|M.allInstances().includes(r))){%]
 [%if (r.at(1).eOpposite.isUndefined() or r.at(1).eOpposite.name.compareTo(r.at(1).name) > 0){%]
 
-[%=e.getNodeId()%] --> [%=v.getNodeId()%] [%=getReferenceLabel(e, v, r.at(1))%][%if (r.at(0).size()>1) {%][[%=r.at(0).indexOf(v)%]][%}%]
+[%=e.getNodeId()%] [%if (r.at(1).isContainment){%]*[%}%]--> [%=v.getNodeId()%] [%=getReferenceLabel(e, v, r.at(1))%][%if (r.at(0).size()>1) {%][[%=r.at(0).indexOf(v)%]][%}%]
 [%}}}}%]
 	
 @enduml
