@@ -122,6 +122,7 @@ var Mode = function() {
     this.HighlightRules = xtendHighlightRules;
     // this.$behaviour = this.$defaultBehaviour;
     this.$behaviour = new XtendBehaviour();
+    this.lineCommentStart = "//";
 };
 oop.inherits(Mode, TextMode);
 
