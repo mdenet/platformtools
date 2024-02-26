@@ -20,7 +20,7 @@ jobs:
       
       - name: Code linting - Xtext Editor Server
         working-directory: ./xtext/editorserver
-        run: npm run lint --workspaces
+        run: npm run lint
 
       - name: Create lint report - Xtext Editor Server
         if: success() || failure()
