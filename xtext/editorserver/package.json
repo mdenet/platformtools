@@ -7,8 +7,9 @@
   "scripts": {
     "build": "",
     "start": "node -r dotenv/config ./src/server.js",
-    "test": "echo \"Warning: no tests to run.\"",
-    "lint": "eslint src/**/*.js --format junit --output-file ./reports/lint-results.xml; exit 0"
+    "test": "jasmine",
+    "lint": "eslint src/**/*.js --format junit --output-file ./reports/lint-results.xml; exit 0",
+    "coverage": "nyc npm run test"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -17,6 +18,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "jasmine": "^5.1.0",
+    "nyc": "^15.1.0"
   }
 }
