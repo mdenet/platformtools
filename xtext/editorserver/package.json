@@ -7,7 +7,7 @@
   "scripts": {
     "build": "",
     "start": "node -r dotenv/config ./src/server.js",
-    "test": "jasmine",
+    "test": "node runJasmine.js",
     "lint": "eslint src/**/*.js --format junit --output-file ./reports/lint-results.xml; exit 0",
     "coverage": "npx c8 npm test"
   },
@@ -20,6 +20,7 @@
     "c8": "^9.1.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.57.0",
-    "jasmine": "^5.1.0"
+    "jasmine": "^5.1.0",
+    "jasmine-reporters": "^2.5.2"
   }
 }
