@@ -58,7 +58,7 @@ jobs:
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.1
         if: success() || failure() && steps.run-unit-tests.outcome == 'success'
         with:
-            reports: '**/reports/coverage*.xml'
+            reports: '**/reports/coverage/coverage*.xml'
             targetdir: ./reports/
             reporttypes: MarkdownSummaryGithub
     
