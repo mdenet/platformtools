@@ -36,7 +36,7 @@ jobs:
         id: run-unit-tests
         working-directory: ./xtext/editorserver
         if: success() || failure() && steps.build-xtext-es.outcome == 'success'
-        run: npm coverage
+        run: npm run coverage
 
       - name: Create test report
         uses: dorny/test-reporter@v1
