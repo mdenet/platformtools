@@ -22,7 +22,7 @@
                 "parameters": [ {"name":"metamodel", "type":"emfatic"}, 
                                 {"name":"constraints", "type":"oclcomplete"}, 
                                 {"name":"model", "type":"xmi", "instanceOf": "metamodel"},
-                                {"name":"language", "type":"string"} ],
+                                {"name":"language", "type":"text"} ],
 
                 "returnType": "text",
 

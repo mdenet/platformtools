@@ -16,7 +16,7 @@ tool:
       name: model
       type: xmi
     - name: language
-      type: string
+      type: text
     path: http://127.0.0.1:8072/services/RunOclFunction
     returnType: text
   panelDefs:
