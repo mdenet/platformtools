@@ -23,7 +23,7 @@
 
                 "returnType": "xmi",
 
-                "path": "http://127.0.0.1:8069/services/FlexmiToXmi"
+                "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/conversion/services/FlexmiToXmi"
 
             }
 
