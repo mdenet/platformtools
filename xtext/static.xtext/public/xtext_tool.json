@@ -3,12 +3,10 @@
         {
             "id": "xtext",
             "name": "Xtext",
-    
             "functions": [
                 {
                     "id": "function-xtext",
                     "name": "xtext",
-    
                     "parameters": [ {"name":"languageName", "type":"text"}, 
                                     {"name":"baseName", "type":"text"},
                                     {"name":"extension", "type":"text"},
@@ -19,7 +17,7 @@
                                     {"name":"language", "type":"text"}],
     
                     "returnType": "text",
-                    "path": "http://127.0.0.1:9000"
+                    "path": "https://ep.mde-network.org/tools/xtext/services/xtext"
                 }
             ],
 

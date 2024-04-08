@@ -89,8 +89,8 @@ Upload Xtext project files.
 
 ```
 {
-    "editorUrl": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/editors/387febee5438973211d6ec302b76c251/",
-    "editorStatusUrl": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/project/xtext/editors/387febee5438973211d6ec302b76c251/status",
+    "editorUrl": "https://ep.mde-network.org/tools/xtext/editors/387febee5438973211d6ec302b76c251/",
+    "editorStatusUrl": "https://ep.mde-network.org/tools/xtext/project/xtext/editors/387febee5438973211d6ec302b76c251/status",
     "output": ""
 }
 ```

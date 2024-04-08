@@ -14,7 +14,7 @@ export const config = {
 
     endpointsPrefix: process.env.ES_ENDPOINT_PREFIX || "",
 
-    trustedWebOrigins: ['http://127.0.0.1:8080'],
+    trustedWebOrigins: ['https://ep.mde-network.org']
 
 
 }
