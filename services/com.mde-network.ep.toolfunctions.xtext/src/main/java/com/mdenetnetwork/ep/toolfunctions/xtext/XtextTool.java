@@ -70,10 +70,9 @@ public class XtextTool  {
 		CliProjectsCreatorMain.main(args);
 		
 		// Add activity files
-        final String languagePath = PROJECT_PATH + baseName + "/src/" + baseName.replace('.', '/');
-        final String languageParentPath = Path.of(languagePath).getParent().toString();
-        
-        final String shortName = languageName.replace(baseName + ".", "");
+        final String basePackage = baseName.substring(0, baseName.lastIndexOf(".")); // Everything but last segment which is the language java class
+        final String shortName = languageName.substring(languageName.lastIndexOf(".") + 1); // The last segment
+        final String languagePath = PROJECT_PATH + baseName + "/src/" + basePackage.replace('.', '/');
 
 		if (grammar != null && !grammar.equals("undefined") ) {
 			final String xtextGrammarPath= languagePath + "/" + shortName + ".xtext";
@@ -81,17 +80,17 @@ public class XtextTool  {
 		}
 
 		if (validator != null && !validator.equals("undefined") ) {
-			final String xtextValidatorPath= languageParentPath + "/validation/" + shortName + "Validator.xtend";
+			final String xtextValidatorPath= languagePath + "/validation/" + shortName + "Validator.xtend";
 			recreateProjectFile(xtextValidatorPath, validator);		
 		}
 		
 		if (scopeProvider != null && !scopeProvider.equals("undefined") ) {
-			final String xtextScopeProviderPath= languageParentPath + "/scoping/" + shortName + "ScopeProvider.xtend";
+			final String xtextScopeProviderPath= languagePath + "/scoping/" + shortName + "ScopeProvider.xtend";
 			recreateProjectFile(xtextScopeProviderPath, scopeProvider);
 		}
 		
 		if (generator != null && !generator.equals("undefined") ) {
-			final String xtextGeneratorPath= languageParentPath + "/generator/" + shortName + "Generator.xtend";
+			final String xtextGeneratorPath= languagePath + "/generator/" + shortName + "Generator.xtend";
 			recreateProjectFile(xtextGeneratorPath, generator);
 		}
 		
