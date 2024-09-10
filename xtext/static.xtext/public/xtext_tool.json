@@ -19,7 +19,7 @@
                                     {"name":"language", "type":"text"}],
     
                     "returnType": "text",
-                    "path": "http://127.0.0.1:9000"
+                    "path": "{{BASE-URL}}:9000"
                 }
             ],
 
