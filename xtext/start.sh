@@ -1,5 +1,10 @@
 #! /bin/bash
 
+if [ -n "${TRUSTED_ORIGINS}" ]; then
+        sed -i "s|http://127.0.0.1:8080|${TRUSTED_ORIGINS}|g" ${ES_DEPLOY_FILE_LOCATION}/ROOT/WEB-INF/web.xml
+        sed -i "s|http://127.0.0.1:8080|${TRUSTED_ORIGINS}|g" ../acemodebundler/web.xml
+fi
+
 # clean any previous editor instances and builds
 rm -rf ${ES_BUILD_LOCATION}/*
 echo Old builds cleaned.
