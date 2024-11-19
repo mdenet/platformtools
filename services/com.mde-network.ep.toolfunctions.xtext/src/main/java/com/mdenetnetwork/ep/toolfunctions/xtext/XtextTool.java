@@ -70,7 +70,7 @@ public class XtextTool  {
 		CliProjectsCreatorMain.main(args);
 		
 		// Add activity files
-        final String basePackage = baseName.substring(0, baseName.lastIndexOf(".")); // Everything but last segment which is the language java class
+        final String basePackage = languageName.substring(0, languageName.lastIndexOf(".")); // Everything but last segment which is the language java class
         final String shortName = languageName.substring(languageName.lastIndexOf(".") + 1); // The last segment
         final String languagePath = PROJECT_PATH + baseName + "/src/" + basePackage.replace('.', '/');
 
