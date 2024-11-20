@@ -17,7 +17,7 @@ tool:
       type: xmi
     - name: language
       type: text
-    path: http://127.0.0.1:8072/services/RunOclFunction
+    path: https://mdenet-ep.sites.er.kcl.ac.uk/tools/ocl/services/RunOclFunction
     returnType: text
   panelDefs:
   - buttons:
