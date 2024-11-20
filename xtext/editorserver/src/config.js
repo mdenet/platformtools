@@ -14,7 +14,7 @@ export const config = {
 
     endpointsPrefix: process.env.ES_ENDPOINT_PREFIX || "",
 
-    trustedWebOrigins: ['https://mdenet-ep.sites.er.kcl.ac.uk']
+    trustedWebOrigins: ['https://ep.mde-network.org/']
 
 
 }

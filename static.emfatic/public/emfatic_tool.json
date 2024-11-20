@@ -23,7 +23,7 @@
 
                 "returnType": "emfatic",
 
-                "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/emfatic/services/EcoreToEmfatic"
+                "path": "https://ep.mde-network.org/tools/emfatic/services/EcoreToEmfatic"
 
             },
 
@@ -37,7 +37,7 @@
 
                 "returnType": "ecore",
 
-                "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/emfatic/services/EmfaticToEcore"
+                "path": "https://ep.mde-network.org/tools/emfatic/services/EmfaticToEcore"
 
             }
 

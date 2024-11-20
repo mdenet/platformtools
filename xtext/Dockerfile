@@ -50,8 +50,8 @@ ENV TS_PORT=9000
 ENV ES_PORT=10001 
 
 # editor server deployed addresses
-ENV ES_ADDRESS=https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/project
-ENV ES_DEPLOY_ADDRESS=https://mdenet-ep.sites.er.kcl.ac.uk/tools/xtext/editors
+ENV ES_ADDRESS=https://ep.mde-network.org/tools/xtext/project
+ENV ES_DEPLOY_ADDRESS=https://ep.mde-network.org/tools/xtext/editors
 
 
 ENV INSTALL_DIR=/usr/local
