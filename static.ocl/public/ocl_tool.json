@@ -26,7 +26,7 @@
 
                 "returnType": "text",
 
-                "path": "https://mdenet-ep.sites.er.kcl.ac.uk/tools/ocl/services/RunOclFunction"
+                "path": "https://ep.mde-network.org/tools/ocl/services/RunOclFunction"
 
             }
 
