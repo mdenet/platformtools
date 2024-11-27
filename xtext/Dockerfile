@@ -3,6 +3,7 @@
 
 FROM node:19-bullseye AS toolstaticbuild
 
+# comma delimited whitelist of base URLs (with no trailing slash) for CORS aware endpoints
 ARG TRUSTED_ORIGINS
 
 RUN apt-get update && apt-get install -y --no-install-recommends zip
