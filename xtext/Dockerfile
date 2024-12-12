@@ -3,6 +3,9 @@
 
 FROM node:19-bullseye AS toolstaticbuild
 
+# comma delimited whitelist of base URLs (with no trailing slash) for CORS aware endpoints
+ARG TRUSTED_ORIGINS
+
 RUN apt-get update && apt-get install -y --no-install-recommends zip
 
 WORKDIR /usr/src/mdenet-tool
@@ -18,6 +21,8 @@ RUN npm install; npm run build; chmod -R 755 dist/
 
 # CORS configuration for webapp
 COPY xtext/acemodebundler/web.xml /usr/src/mdenet-tool/dist/WEB-INF/web.xml
+
+RUN sed -i "s|http://127.0.0.1:8080|$TRUSTED_ORIGINS|g" /usr/src/mdenet-tool/dist/WEB-INF/web.xml
 
 RUN cd dist && zip -r ROOT.war .
 
@@ -43,6 +48,8 @@ RUN mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.0:get -Dartifact=co
 
 FROM tomcat:9.0.76-jdk17-temurin
 
+# See https://github.com/mdenet/educationplatform-docker/blob/development_server/README.md#environment-variables
+ARG ES_ADDRESS
 
 # toolserice main endpoint port
 ENV TS_PORT=9000

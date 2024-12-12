@@ -23,7 +23,7 @@
 
                 "returnType": "emfatic",
 
-                "path": "http://127.0.0.1:8071/services/EcoreToEmfatic"
+                "path": "{{BASE-URL}}:8071/services/EcoreToEmfatic"
 
             },
 
@@ -37,7 +37,7 @@
 
                 "returnType": "ecore",
 
-                "path": "http://127.0.0.1:8071/services/EmfaticToEcore"
+                "path": "{{BASE-URL}}:8071/services/EmfaticToEcore"
 
             }
 

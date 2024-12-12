@@ -25,7 +25,7 @@
     
                     "returnType": "diagram",
     
-                    "path": "http://127.0.0.1:8070/emfatic2plantuml"
+                    "path": "{{BASE-URL}}:8070/emfatic2plantuml"
     
                 },
     
