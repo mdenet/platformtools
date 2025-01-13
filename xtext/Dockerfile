@@ -52,7 +52,7 @@ FROM tomcat:9.0.76-jdk17-temurin
 ARG ES_ADDRESS
 ARG ES_DEPLOY_ADDRESS
 
-# toolserice main endpoint port
+# toolservice main endpoint port
 ENV TS_PORT=9000
 # editor server internal port
 ENV ES_PORT=10001 
