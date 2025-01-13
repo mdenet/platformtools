@@ -48,7 +48,7 @@ RUN mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.0:get -Dartifact=co
 
 FROM tomcat:9.0.76-jdk17-temurin
 
-# See https://github.com/mdenet/educationplatform-docker/blob/development_server/README.md#environment-variables
+# See https://github.com/mdenet/educationplatform-docker/blob/main/README.md#environment-variables
 ARG ES_ADDRESS
 ARG ES_DEPLOY_ADDRESS
 
