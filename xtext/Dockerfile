@@ -50,6 +50,7 @@ FROM tomcat:9.0.76-jdk17-temurin
 
 # See https://github.com/mdenet/educationplatform-docker/blob/development_server/README.md#environment-variables
 ARG ES_ADDRESS
+ARG ES_DEPLOY_ADDRESS
 
 # toolserice main endpoint port
 ENV TS_PORT=9000
