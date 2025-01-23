@@ -28,6 +28,9 @@ catalina.sh run &
 # start editorserver
 node ./src/server.js &
 
+# start the websocket server
+node ./src/websockets.js &
+
 # start cron
 cron
 
