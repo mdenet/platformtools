@@ -42,7 +42,7 @@ class XtextController {
 
             let response = {};
             response.editorUrl= `${config.deployAddress}/${req.file.filename}/`;
-            response.editorStatusUrl= `${config.address}/xtext/editors/${req.file.filename}/status`
+            response.editorID= `${req.file.filename}`
 
             res.status(200).json(response);
             
