@@ -68,7 +68,9 @@ wss.on('connection', function connection(ws) {
         var response = checkEditor(data);
         var response_length = response.output.length;
             ws.send(JSON.stringify(response));
-            if (response.editorReady){ws.terminate()}
+        if (response.editorReady) {
+            ws.terminate()
+        }
         else {
         while(!response.editorReady){
             response = checkEditor(data);
