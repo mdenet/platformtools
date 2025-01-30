@@ -35,7 +35,7 @@ public class XtextTool  {
 	static final String PROJECT_FILENAME = "xtext-project.zip" ;
 	static final String PROJECT_FILE_PATH = "./" + PROJECT_FILENAME ;
 	static final String ES_JSON_RESPONSE_FIELD = "editorUrl";
-	static final String ES_JSON_RESPONSE_FIELD_STATUS = "editorStatusUrl";
+	static final String ES_JSON_RESPONSE_FIELD_ID = "editorID";
 	static final int FILE_BUFFER_SIZE = 1024;
 	
 	public XtextTool() {
@@ -201,7 +201,7 @@ public class XtextTool  {
 		JsonObject jsonObject = JsonParser.parseString(uploadResponse).getAsJsonObject();
 				
 		response.addProperty(ES_JSON_RESPONSE_FIELD, jsonObject.get(ES_JSON_RESPONSE_FIELD).getAsString());
-		response.addProperty(ES_JSON_RESPONSE_FIELD_STATUS, jsonObject.get(ES_JSON_RESPONSE_FIELD_STATUS).getAsString());
+		response.addProperty(ES_JSON_RESPONSE_FIELD_ID, jsonObject.get(ES_JSON_RESPONSE_FIELD_ID).getAsString());
 	}
 	
 	private void deleteDir(File dir){
