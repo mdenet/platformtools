@@ -54,14 +54,16 @@ function subscribe_to_build(editorID) {
     var response = get_response();
 
     const filePath = config.deployFileLocation + "/" + editorID;
-    const buildLogPath= config.buildFileLocation + "/" + editorID + "/" + "build.log";
+    const buildPath = config.buildFileLocation + "/" + editorID;
     const buildStatusPath= `${config.buildFileLocation}/${editorID}/build.res`;
     
     var buildLog = '';
     var buildStatus = -1;
 
     // watch the build log file for changes
-    fs.watch(buildLogPath, () => {
+    fs.watch(buildPath, () => {
+        const buildLogPath = buildPath + "/" + "build.log";
+
         if (fs.existsSync(buildLogPath)) {
             buildLog = fs.readFileSync(buildLogPath, 'utf8');
         }
