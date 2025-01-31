@@ -101,6 +101,9 @@ function get_response(){
     return {'editorReady': false, 'output': '', 'error': ''};
 }
 
+/**
+ * handles pong messages
+ */
 function heartbeat() {
   this.isAlive = true;
 }
