@@ -111,7 +111,8 @@ wss.on('connection', function connection(ws) {
     ws.isAlive = true;
     ws.on('error', console.error);
     ws.on('pong', heartbeat);
-    ws.on('message', subscribe_to_build(data));
+
+    ws.on('message', subscribe_to_build);
 });
 
 // Ping and look for broken connections, every 3 seconds 
