@@ -75,9 +75,7 @@ function subscribe_to_build(editorID) {
             }
         }
 
-        editorDeployed = fs.existsSync(filePath);
-    
-        response.editorReady = editorDeployed;
+        response.editorReady = fs.existsSync(filePath);
         response.output = buildLog;
         ws.send(JSON.stringify(response));
     });
@@ -114,7 +112,6 @@ wss.on('connection', function connection(ws) {
     ws.isAlive = true;
     ws.on('error', console.error);
     ws.on('pong', heartbeat);
-
     ws.on('message', subscribe_to_build);
 });
 
