@@ -81,7 +81,7 @@ function subscribe_to_build(editorID) {
     });
 
     // watch the deploy location to detect when the editor is depoyed
-    fs.watch(config.deployFileLocation, (...args) =>{   
+    fs.watch(config.deployFileLocation, (_, fileName) =>{   
         const filename = args[1];
         if (filename == editorID){
             response.editorReady = true;
