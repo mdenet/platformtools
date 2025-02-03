@@ -2,53 +2,6 @@ import { WebSocketServer } from 'ws';
 import { config } from "./config.js";
 import  fs from "fs";
 
-function checkEditor(data){
-
-            const editorId = data;
-            const filePath = config.deployFileLocation + "/" + editorId;
-            const buildLogPath= `${config.buildFileLocation}/${editorId}/build.log`;
-            const buildStatusPath= `${config.buildFileLocation}/${editorId}/build.res`;
-            const editorDeployed = fs.existsSync(filePath);
-            
-            let buildLog;
-            let buildStatus;
-
-            // Read the build log
-            try {
-                if (fs.existsSync(buildLogPath)) {
-                    buildLog = fs.readFileSync(buildLogPath, 'utf8');
-                } else {
-                    buildLog = "";
-                }
-            } catch (err) {
-                console.log("Error reading build log: " + buildLogPath);
-                console.log(err);
-            }
-
-            // Read the build status
-            try {
-                if (fs.existsSync(buildStatusPath)) {
-                    buildStatus = Number( fs.readFileSync(buildStatusPath, 'utf8') );
-                } else {
-                    buildStatus = 0;
-                }
-            } catch (err) {
-                console.log("Error reading build status: " + buildStatusPath);
-                console.log(err);
-            }
-
-            let response = {};
-            response.editorReady = editorDeployed;
-            response.output = buildLog;
-
-            if ( buildStatus > 0 ){
-                // Build failed
-                response.error = "Please refer to the build log.";
-            }
-	 return response;
-
-}
-
 
 function subscribe_to_build(editorID) {
     var response = get_response();
