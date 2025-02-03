@@ -13,7 +13,7 @@ class XtextController {
     constructor(multipartHandler) {
         this.upload = multipartHandler;
         this.router.post('/upload', this.upload.single('xtextProject'), asyncCatch(this.saveProject));
-        this.router.get('/editors/:editorId/status', asyncCatch(this.editorStatus));
+        // this.router.get('/editors/:editorId/status', asyncCatch(this.editorStatus));
     }
 
     saveProject = async (req, res, next) => {
