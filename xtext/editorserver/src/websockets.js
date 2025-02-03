@@ -2,7 +2,10 @@ import { WebSocketServer } from 'ws';
 import { config } from "./config.js";
 import  fs from "fs";
 
-
+/**
+ * subscribes to updates from build files of Xtext project
+ * @param {*} editorID - string unique project identifier @see controllers/XtextController.js
+ */
 function subscribe_to_build(editorID) {
     var response = get_response();
 
