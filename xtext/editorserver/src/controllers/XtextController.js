@@ -52,6 +52,9 @@ class XtextController {
 
     }
 
+    /**
+     * @deprecated
+     */
     editorStatus = async (req, res, next) => {
         try {
             const editorId = req.params.editorId;
