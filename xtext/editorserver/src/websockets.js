@@ -33,7 +33,7 @@ function subscribe_to_build(editorID) {
 
         response.editorReady = fs.existsSync(filePath);
         response.output = buildLog;
-        ws.send(JSON.stringify(response));
+        this.send(JSON.stringify(response));
     });
 
     // watch the deploy location to detect when the editor is depoyed
@@ -42,8 +42,8 @@ function subscribe_to_build(editorID) {
         if (filename == editorID){
             response.editorReady = true;
             response.output = buildLog;
-            ws.send(JSON.stringify(response));
-            ws.terminate();
+            this.send(JSON.stringify(response));
+            this.terminate();
         }
     });
 }
