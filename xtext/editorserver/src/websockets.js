@@ -55,13 +55,6 @@ function get_response(){
     return {'editorReady': false, 'output': '', 'error': ''};
 }
 
-/**
- * handles pong messages
- */
-function heartbeat() {
-  this.isAlive = true;
-}
-
 const wss = new WebSocketServer({ port: 8000 });
 
 wss.on('connection', function connection(ws) {
