@@ -67,7 +67,7 @@ const wss = new WebSocketServer({ port: 8000 });
 wss.on('connection', function connection(ws) {
     ws.isAlive = true;
     ws.on('error', console.error);
-    ws.on('pong', heartbeat);
+    ws.on('pong', () => { ws.isAlive = true; });
     ws.on('message', subscribe_to_build);
 });
 
