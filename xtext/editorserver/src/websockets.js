@@ -4,12 +4,9 @@ import  fs from "fs";
 
 /**
  * subscribes to updates from build files of Xtext project
- * @param {*} ws - current websocket instance
  * @param {*} editorID - string unique project identifier @see controllers/XtextController.js
- * @param {*} buildPathWatcher - file watch for build path
- * @param {*} deployPathWatcher -  file watch for deploy path
  */
-function subscribe_to_build(ws, editorID, buildPathWatcher, deployPathWatcher) {
+function subscribe_to_build(editorID) {
     var response = get_response();
 
     const filePath = config.deployFileLocation + "/" + editorID;
@@ -36,7 +33,7 @@ function subscribe_to_build(ws, editorID, buildPathWatcher, deployPathWatcher) {
 
         response.editorReady = fs.existsSync(filePath);
         response.output = buildLog;
-        ws.send(JSON.stringify(response));
+        this.send(JSON.stringify(response));
     });
 
     // watch the deploy location to detect when the editor is depoyed
@@ -44,8 +41,8 @@ function subscribe_to_build(ws, editorID, buildPathWatcher, deployPathWatcher) {
         if (fileName == editorID){
             response.editorReady = true;
             response.output = buildLog;
-            ws.send(JSON.stringify(response));
-            ws.terminate();
+            this.send(JSON.stringify(response));
+            this.terminate();
         }
     });
 }
@@ -59,18 +56,17 @@ function get_response(){
 
 const wss = new WebSocketServer({ port: 8000 });
 
+const buildPathWatcher = null;
+const deployPathWatcher = null;
+
 wss.on('connection', function connection(ws) {
-    const buildPathWatcher = null;
-    const deployPathWatcher = null;
     ws.isAlive = true;
     ws.on('error', () => {
         buildPathWatcher?.close();
         deployPathWatcher?.close();
     });
     ws.on('pong', () => { ws.isAlive = true; });
-    ws.on('message', function(data) {
-        subscribe_to_build(this, data, buildPathWatcher, deployPathWatcher);
-    });
+    ws.on('message', subscribe_to_build);
     ws.on('close', () => {
         buildPathWatcher?.close();
         deployPathWatcher?.close();
