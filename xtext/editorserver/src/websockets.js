@@ -59,7 +59,8 @@ function get_response(){
 const wss = new WebSocketServer({ port: 8000 });
 
 wss.on('connection', function connection(ws) {
-    var buildPathWatcher = deployPathWatcher = null;
+    const buildPathWatcher = null;
+    const deployPathWatcher = null;
     ws.isAlive = true;
     ws.on('error', () => {
         buildPathWatcher?.close();
