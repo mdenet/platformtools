@@ -70,8 +70,8 @@ wss.on('connection', function connection(ws) {
     ws.isAlive = true;
 
     ws.on('error', () => {
-        buildPathWatcher?.close();
-        deployPathWatcher?.close();
+        fileWatchers.buildPathWatcher?.close();
+        fileWatchers.deployPathWatcher?.close();
     });
     ws.on('pong', () => { ws.isAlive = true; });
     ws.on('message', (data) => {
