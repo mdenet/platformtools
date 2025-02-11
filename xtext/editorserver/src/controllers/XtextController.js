@@ -1,7 +1,5 @@
 import * as express from "express";
 import  { spawn } from "child_process";
-import  fs from "fs";
-
 import {asyncCatch} from "../middleware/ErrorHandlingMiddleware.js";
 import { config } from "../config.js";
 
@@ -13,7 +11,6 @@ class XtextController {
     constructor(multipartHandler) {
         this.upload = multipartHandler;
         this.router.post('/upload', this.upload.single('xtextProject'), asyncCatch(this.saveProject));
-        this.router.get('/editors/:editorId/status', asyncCatch(this.editorStatus));
     }
 
     saveProject = async (req, res, next) => {
@@ -42,68 +39,14 @@ class XtextController {
 
             let response = {};
             response.editorUrl= `${config.deployAddress}/${req.file.filename}/`;
-            response.editorStatusUrl= `${config.address}/xtext/editors/${req.file.filename}/status`
+            response.editorID= `${req.file.filename}`
 
             res.status(200).json(response);
             
         } catch (err) {
             next(err);
         }
-
     }
-
-    editorStatus = async (req, res, next) => {
-        try {
-            const editorId = req.params.editorId;
-            const filePath = config.deployFileLocation + "/" + editorId;
-            const buildLogPath= `${config.buildFileLocation}/${editorId}/build.log`;
-            const buildStatusPath= `${config.buildFileLocation}/${editorId}/build.res`;
-            const editorDeployed = fs.existsSync(filePath);
-            
-            let buildLog;
-            let buildStatus;
-
-            // Read the build log
-            try {
-                if (fs.existsSync(buildLogPath)) {
-                    buildLog = fs.readFileSync(buildLogPath, 'utf8');
-                } else {
-                    buildLog = "";
-                }
-            } catch (err) {
-                console.log("Error reading build log: " + buildLogPath);
-                console.log(err);
-            }
-
-            // Read the build status
-            try {
-                if (fs.existsSync(buildStatusPath)) {
-                    buildStatus = Number( fs.readFileSync(buildStatusPath, 'utf8') );
-                } else {
-                    buildStatus = 0;
-                }
-            } catch (err) {
-                console.log("Error reading build status: " + buildStatusPath);
-                console.log(err);
-            }
-
-            let response = {};
-            response.editorReady = editorDeployed;
-            response.output = buildLog;
-
-            if ( buildStatus > 0 ){
-                // Build failed
-                response.error = "Please refer to the build log.";
-            }
-            
-            res.status(200).json(response);
-
-        } catch (err) {
-            next(err);
-        }
-    }
-        
-
 }
 
 export { XtextController };
