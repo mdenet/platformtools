@@ -4,7 +4,9 @@ import  fs from "fs";
 
 /**
  * subscribes to updates from build files of Xtext project
+ * @param {*} ws - web socket object
  * @param {*} editorID - string unique project identifier @see controllers/XtextController.js
+ * @param {*} fileWatchers - dictionary contains references to file watchers @see get_file_watchers()
  */
 function subscribe_to_build(ws, editorID, fileWatchers) {
     var response = get_response();
