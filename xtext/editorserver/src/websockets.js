@@ -66,14 +66,14 @@ const wss = new WebSocketServer({ port: 8000 });
 wss.on('connection', function connection(ws) {
     const fileWatchers = get_file_watchers();
     ws.isAlive = true;
-    
+
     ws.on('error', () => {
         buildPathWatcher?.close();
         deployPathWatcher?.close();
     });
     ws.on('pong', () => { ws.isAlive = true; });
     ws.on('message', (data) => {
-        subscribe_to_build(this, data, fileWatchers)
+        subscribe_to_build(ws, data, fileWatchers)
     });
     ws.on('close', () => {
         fileWatchers.buildPathWatcher?.close();
