@@ -74,5 +74,5 @@ jobs:
         if: ${{ !cancelled() }}           # run this step even if previous step failed
         with:
           name: coverage-results-editor-server
-          path: "**/reports/SummaryGithub.md"
+          path: "./reports/SummaryGithub.md"
 
