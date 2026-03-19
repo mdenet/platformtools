@@ -67,16 +67,19 @@ ENV ES_DEPLOY_FILE_LOCATION=${CATALINA_HOME}/webapps
 
 # The release of node to install
 ENV NODE_VERSION=19.9.0
-ENV NODE_RELEASE=node-v${NODE_VERSION}-linux-x64
 
 RUN apt-get update && apt-get install -y --no-install-recommends unzip zip xz-utils maven cron psmisc
 
-# Install node
+# Install node (detect architecture for arm64/x64 compatibility)
 WORKDIR $INSTALL_DIR
-RUN echo installing ${NODE_RELEASE}\
-    && curl --output ${NODE_RELEASE}.tar.xz  https://nodejs.org/download/release/v${NODE_VERSION}/${NODE_RELEASE}.tar.xz\
-    && tar -xf ${NODE_RELEASE}.tar.xz
-ENV PATH="$INSTALL_DIR/${NODE_RELEASE}/bin:${PATH}"
+RUN ARCH=$(dpkg --print-architecture) \
+    && if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "aarch64" ]; then NODE_ARCH="linux-arm64"; else NODE_ARCH="linux-x64"; fi \
+    && NODE_RELEASE="node-v${NODE_VERSION}-${NODE_ARCH}" \
+    && echo "Installing ${NODE_RELEASE}" \
+    && curl --output ${NODE_RELEASE}.tar.xz https://nodejs.org/download/release/v${NODE_VERSION}/${NODE_RELEASE}.tar.xz \
+    && tar -xf ${NODE_RELEASE}.tar.xz \
+    && ln -s ${INSTALL_DIR}/${NODE_RELEASE} ${INSTALL_DIR}/node
+ENV PATH="$INSTALL_DIR/node/bin:${PATH}"
 
 
 WORKDIR /usr/src/toolfunctions
