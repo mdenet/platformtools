@@ -121,9 +121,12 @@ RUN apt-get update \
     && apt-get install -y python3-minimal maven tini netcat \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy built tool and sources
+# Copy built tool and sources (only the modules required for the emf profile)
 COPY --from=mavenbuilder /root/.m2 /root/.m2
-COPY --from=mavenbuilder /usr/src/toolfunctions /toolservice
+COPY --from=mavenbuilder /usr/src/toolfunctions/pom.xml /toolservice/pom.xml
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.core /toolservice/com.mde-network.ep.toolfunctions.core
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emf /toolservice/com.mde-network.ep.toolfunctions.emf
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emffunction /toolservice/com.mde-network.ep.toolfunctions.emffunction
 
 # Copy files for webserver
 COPY static.emf/nginx.conf.template /etc/nginx.conf.template
@@ -152,9 +155,13 @@ RUN apt-get update \
     && apt-get install -y python3-minimal maven tini netcat \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy built tool and sources
+# Copy built tool and sources (only the modules required for the emfatic profile)
 COPY --from=mavenbuilder /root/.m2 /root/.m2
-COPY --from=mavenbuilder /usr/src/toolfunctions /toolservice
+COPY --from=mavenbuilder /usr/src/toolfunctions/pom.xml /toolservice/pom.xml
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.core /toolservice/com.mde-network.ep.toolfunctions.core
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emf /toolservice/com.mde-network.ep.toolfunctions.emf
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emfatic /toolservice/com.mde-network.ep.toolfunctions.emfatic
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emfaticfunction /toolservice/com.mde-network.ep.toolfunctions.emfaticfunction
 
 # Copy files for webserver
 COPY static.emfatic/nginx.conf.template /etc/nginx.conf.template
@@ -182,9 +189,12 @@ RUN apt-get update \
     && apt-get install -y python3-minimal openjdk-17-jdk maven tini netcat \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy built tool and sources
+# Copy built tool and sources (only the modules required for the ocl profile)
 COPY --from=mavenbuilder /root/.m2 /root/.m2
-COPY --from=mavenbuilder /usr/src/toolfunctions /toolservice
+COPY --from=mavenbuilder /usr/src/toolfunctions/pom.xml /toolservice/pom.xml
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.core /toolservice/com.mde-network.ep.toolfunctions.core
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.eclipseocl /toolservice/com.mde-network.ep.toolfunctions.eclipseocl
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.eclipseoclfunction /toolservice/com.mde-network.ep.toolfunctions.eclipseoclfunction
 
 # Copy files for webserver
 COPY static.ocl/nginx.conf.template /etc/nginx.conf.template
@@ -215,9 +225,13 @@ RUN apt-get update \
 # Copy tool sources
 COPY services/epsilon /toolservice
 
-# Copy additional built tool and sources
+# Copy additional built tool and sources (only the modules required for the epsilon profile)
 COPY --from=mavenbuilder /root/.m2 /root/.m2
-COPY --from=mavenbuilder /usr/src/toolfunctions /toolservice-add
+COPY --from=mavenbuilder /usr/src/toolfunctions/pom.xml /toolservice-add/pom.xml
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.core /toolservice-add/com.mde-network.ep.toolfunctions.core
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emf /toolservice-add/com.mde-network.ep.toolfunctions.emf
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.epsilon /toolservice-add/com.mde-network.ep.toolfunctions.epsilon
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.epsilonfunction /toolservice-add/com.mde-network.ep.toolfunctions.epsilonfunction
 
 # Copy files for webserver
 COPY static.conversion/nginx.conf.template /etc/nginx.conf.template
@@ -279,9 +293,13 @@ ENV PATH="$INSTALL_DIR/node/bin:${PATH}"
 
 WORKDIR /usr/src/toolfunctions
 
-# Copy built tool and sources
+# Copy built tool and sources (only the modules required for the xtext profile)
 COPY --from=mavenbuilder /root/.m2 /root/.m2
-COPY --from=mavenbuilder /usr/src/toolfunctions /toolservice
+COPY --from=mavenbuilder /usr/src/toolfunctions/pom.xml /toolservice/pom.xml
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.core /toolservice/com.mde-network.ep.toolfunctions.core
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.emf /toolservice/com.mde-network.ep.toolfunctions.emf
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.xtext /toolservice/com.mde-network.ep.toolfunctions.xtext
+COPY --from=mavenbuilder /usr/src/toolfunctions/com.mde-network.ep.toolfunctions.xtextfunction /toolservice/com.mde-network.ep.toolfunctions.xtextfunction
 
 COPY xtext/acemodebundler /acemodebundler
 COPY xtext/editorserver ${ES_DIR}
