@@ -136,6 +136,13 @@ COPY --from=staticbuild-emf /usr/src/mdenet-tool/dist /usr/share/nginx/html
 
 WORKDIR /toolservice
 
+# Due to https://issues.apache.org/jira/browse/MDEP-568, m-dependency-p
+# is not a practical solution for ensuring all dependencies are available.
+#
+# We use https://github.com/qaware/go-offline-maven-plugin instead.
+# TODO: This was commented out in the original Docker file, but is active in some of the other tools. Need to understand which is correct.
+#RUN mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
+
 # Copy start script and make it executable
 ADD static.emf/start.sh /
 RUN chmod +x /start.sh
@@ -171,6 +178,13 @@ COPY --from=staticbuild-emfatic /usr/src/mdenet-tool/dist /usr/share/nginx/html
 
 WORKDIR /toolservice
 
+# Due to https://issues.apache.org/jira/browse/MDEP-568, m-dependency-p
+# is not a practical solution for ensuring all dependencies are available.
+#
+# We use https://github.com/qaware/go-offline-maven-plugin instead.
+# TODO: This was commented out in the original Docker file, but is active in some of the other tools. Need to understand which is correct.
+#RUN mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
+
 ADD static.emfatic/start.sh /
 RUN chmod +x /start.sh
 
@@ -203,6 +217,13 @@ RUN rm -r /usr/share/nginx/html/*
 COPY --from=staticbuild-ocl /usr/src/mdenet-tool/dist /usr/share/nginx/html
 
 WORKDIR /toolservice
+
+# Due to https://issues.apache.org/jira/browse/MDEP-568, m-dependency-p
+# is not a practical solution for ensuring all dependencies are available.
+#
+# We use https://github.com/qaware/go-offline-maven-plugin instead.
+# TODO: This was commented out in the original Docker file, but is active in some of the other tools. Need to understand which is correct.
+#RUN mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
 
 ADD static.ocl/start.sh /
 RUN chmod +x /start.sh
