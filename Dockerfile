@@ -311,7 +311,9 @@ ENV ES_DEPLOY_FILE_LOCATION=${CATALINA_HOME}/webapps
 # The release of node to install
 ENV NODE_VERSION=19.9.0
 
-RUN apt-get update && apt-get install -y --no-install-recommends unzip zip xz-utils maven cron psmisc
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip zip xz-utils maven cron psmisc \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install node (detect architecture for arm64/x64 compatibility)
 WORKDIR $INSTALL_DIR
