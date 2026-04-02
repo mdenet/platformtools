@@ -38,9 +38,11 @@ FROM node:19-bullseye AS staticbuild-emf
 WORKDIR /usr/src/mdenet-tool
 
 COPY static.emf/package*.json ./
-COPY static.emf .
+RUN npm ci
 
-RUN npm install; npm run build; chmod -R 755 dist/
+COPY static.emf .
+RUN npm run build \
+    && chmod -R 755 dist/
 
 
 # ---------------------------------------------------------------------------
@@ -51,9 +53,11 @@ FROM node:19-bullseye AS staticbuild-emfatic
 WORKDIR /usr/src/mdenet-tool
 
 COPY static.emfatic/package*.json ./
-COPY static.emfatic .
+RUN npm ci
 
-RUN npm install; npm run build; chmod -R 755 dist/
+COPY static.emfatic .
+RUN npm run build \
+    && chmod -R 755 dist/
 
 
 # ---------------------------------------------------------------------------
@@ -64,9 +68,12 @@ FROM node:19-bullseye AS staticbuild-ocl
 WORKDIR /usr/src/mdenet-tool
 
 COPY static.ocl/package*.json ./
+RUN npm ci
+
 COPY static.ocl .
 
-RUN npm install; npm run build; chmod -R 755 dist/
+RUN npm run build \
+    && chmod -R 755 dist/
 
 
 # ---------------------------------------------------------------------------
@@ -77,9 +84,12 @@ FROM node:19-bullseye AS staticbuild-conversion
 WORKDIR /usr/src/mdenet-tool
 
 COPY static.conversion/package*.json ./
+RUN npm ci
+
 COPY static.conversion .
 
-RUN npm install; npm run build; chmod -R 755 dist/
+RUN npm run build \
+    && chmod -R 755 dist/
 
 
 # ---------------------------------------------------------------------------
@@ -94,9 +104,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends zip && rm -rf /
 WORKDIR /usr/src/mdenet-tool
 
 COPY xtext/static.xtext/package*.json ./
-COPY xtext/static.xtext .
+RUN npm ci
 
-RUN npm install; npm run build; chmod -R 755 dist/
+COPY xtext/static.xtext .
+RUN npm run build \
+    && chmod -R 755 dist/
 
 # CORS configuration for webapp
 COPY xtext/acemodebundler/web.xml /usr/src/mdenet-tool/dist/WEB-INF/web.xml
