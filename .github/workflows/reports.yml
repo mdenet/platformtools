@@ -17,7 +17,7 @@ jobs:
       - name: Create lint report - Xtext Editor Server
         id: build-xtext-es
         if: success() || failure()
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         with:
             name: Lint Results - Xtext Editor Server
             artifact: lint-results-editor-server
@@ -26,7 +26,7 @@ jobs:
             fail-on-error: true
 
       - name: Create test report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         if: success() || failure() 
         with:
             name: Unit Test Results
@@ -36,7 +36,7 @@ jobs:
             fail-on-error: true
 
       - name: Download Coverage Files 
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         if: success() || failure() 
         with:
             name: coverage-results-editor-server
