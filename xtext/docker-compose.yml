@@ -3,10 +3,18 @@ services:
     mdenet-tool-xtext:
       image: mdenet-tool-xtext:latest
       ports: 
+          - 8074:8080
           - 10001:10001
-          - 9001:8080
           - 9000:9000
-          
+      environment:
+          - TRUSTED_ORIGINS
+          - ES_DEPLOY_ADDRESS
+          - ES_ADDRESS
       build:
           context: ..
-          dockerfile: xtext/Dockerfile
+          dockerfile: Dockerfile
+          target: toolservice-xtext
+          args:
+              - TRUSTED_ORIGINS=$TRUSTED_ORIGINS
+              - ES_ADDRESS=$ES_ADDRESS          
+              - ES_DEPLOY_ADDRESS=$ES_DEPLOY_ADDRESS          
