@@ -89,7 +89,7 @@ FROM node:19-bullseye AS staticbuild-xtext
 
 ARG TRUSTED_ORIGINS
 
-RUN apt-get update && apt-get install -y --no-install-recommends zip
+RUN apt-get update && apt-get install -y --no-install-recommends zip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/mdenet-tool
 
