@@ -291,14 +291,14 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
 # ---------------------------------------------------------------------------
 FROM tomcat:9.0.76-jdk17-temurin AS toolservice-xtext
 
-# See https://github.com/mdenet/educationplatform-docker/blob/main/README.md#environment-variables
-ARG ES_ADDRESS
-ARG ES_DEPLOY_ADDRESS
-
 # toolservice main endpoint port
 ENV TS_PORT=9000
 # editor server internal port
 ENV ES_PORT=10001
+
+# See https://github.com/mdenet/educationplatform-docker/blob/main/README.md#environment-variables
+ENV ES_ADDRESS="http://127.0.0.1:${ES_PORT}"
+ENV ES_DEPLOY_ADDRESS="http://127.0.0.1:8074"
 
 ENV INSTALL_DIR=/usr/local
 
